@@ -111,3 +111,24 @@ Matrix& zeros(const int n_row, const int n_column) {
 	
 	return (*m_aux);
 }
+
+Matrix& Matrix::operator * (Matrix &m){
+	if (this->n_column != m.n_column) {
+		cout << "Matrix sum: error in n_row/n_column\n";
+        exit(EXIT_FAILURE);
+	}
+	
+	Matrix *m_aux = new Matrix(this->n_row, m.n_column);
+	
+    for(int i = 1; i <= this->n_row; i++) {
+        for(int j = 1; j <= m.n_column; j++) {
+			int suma = 0;
+			for(int k = 1; k <= this->n_column; k++){
+				suma = (*this)(i, k)*(k, j);
+			}
+			(*m_aux)(i,j) = suma;
+		}
+	}
+	
+	return *m_aux;
+}
