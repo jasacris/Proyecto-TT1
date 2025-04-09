@@ -1,4 +1,4 @@
-#include "..\include\matrix.h"
+#include "..\include\matrix.hpp"
 #include <cstdio>
 #include <cmath>
 
@@ -48,6 +48,27 @@ int m_sum_01() {
     return 0;
 }
 
+int m_sum_02() {
+    int f = 3;
+    int c = 4;
+	
+	Matrix A(f, c);
+	A(1,1) = 0; A(1,2) =  2; A(1,3) = 8; A(1,4) = 0;
+	A(2,1) = 1; A(2,2) = -1; A(2,3) = 0; A(2,4) = 0;
+	A(3,1) = 0; A(3,2) =  1; A(3,3) = 0; A(3,4) = 5;
+	
+	Matrix C(f, c);
+	C(1,1) = 2; C(1,2) =  4; C(1,3) = 10; C(1,4) = 2;
+	C(2,1) = 3; C(2,2) = 1; C(2,3) = 2; C(2,4) = 2;
+	C(3,1) = 2; C(3,2) = 3; C(3,3) = 2; C(3,4) = 7;
+	
+	Matrix R = A + 2.0;
+    
+    _assert(m_equals(C, R, 1e-10));
+    
+    return 0;
+}
+
 int m_sub_01() {
     int f = 3;
     int c = 4;
@@ -74,6 +95,27 @@ int m_sub_01() {
     return 0;
 }
 
+int m_sub_02() {
+    int f = 3;
+    int c = 4;
+	
+	Matrix A(f, c);
+	A(1,1) = 0; A(1,2) = 2; A(1,3) = 8; A(1,4) = 0;
+	A(2,1) = 1; A(2,2) = -1; A(2,3) = 0; A(2,4) = 0;
+	A(3,1) = 0; A(3,2) = 1; A(3,3) = 0; A(3,4) = 5;
+	
+	Matrix C(f, c);
+	C(1,1) = -2; C(1,2) = 0; C(1,3) = 6; C(1,4) = -2;
+	C(2,1) = -1; C(2,2) = -3; C(2,3) = -2; C(2,4) = -2;
+	C(3,1) = -2; C(3,2) = -1; C(3,3) = -2; C(3,4) = 3;
+	
+	Matrix R = A - 2.0;
+    
+    _assert(m_equals(C, R, 1e-10));
+    
+    return 0;
+}
+
 int m_zeros_01() {
     int f = 3;
     int c = 4;
@@ -92,20 +134,7 @@ int m_zeros_01() {
 
 int m_prod_01() {
 
-   atrix A(2, 3);
-    A(1, 1) = 1; A(1, 2) = 2; A(1, 3) = 3;
-    A(2, 1) = 4; A(2, 2) = 5; A(2, 3) = 6;
-
-    Matrix B(3, 2);
-    B(1, 1) = 7; B(1, 2) = 8;
-    B(2, 1) = 9; B(2, 2) = 10;
-    B(3, 1) = 11; B(3, 2) = 12;
-
-	Matrix C(2, 2);
-	C(1,1) = 58; C(1,2) = 64;
-	C(2,1) = 139; C(2,2) = 154;
-
-    Matrix R = A * B; Matrix A(2, 3);
+    Matrix A(2, 3);
     A(1, 1) = 1; A(1, 2) = 2; A(1, 3) = 3;
     A(2, 1) = 4; A(2, 2) = 5; A(2, 3) = 6;
 
@@ -119,7 +148,24 @@ int m_prod_01() {
 	C(2,1) = 139; C(2,2) = 154;
 
     Matrix R = A * B;
+	
+    _assert(m_equals(C, R, 1e-10));
     
+    return 0;
+}
+
+int m_prod_02() {
+
+    Matrix A(2, 3);
+    A(1, 1) = 1; A(1, 2) = 2; A(1, 3) = 3;
+    A(2, 1) = 4; A(2, 2) = 5; A(2, 3) = 6;
+
+	Matrix C(2, 3);
+    C(1, 1) = 2; C(1, 2) = 4; C(1, 3) = 6;
+    C(2, 1) = 8; C(2, 2) = 10; C(2, 3) = 12;
+
+    Matrix R = A * 2.0;
+	
     _assert(m_equals(C, R, 1e-10));
     
     return 0;
@@ -131,6 +177,9 @@ int all_tests()
     _verify(m_sub_01);
     _verify(m_zeros_01);
     _verify(m_prod_01);
+	_verify(m_sum_02);
+    _verify(m_sub_02);
+    _verify(m_prod_02);
 
     return 0;
 }

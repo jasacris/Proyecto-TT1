@@ -1,4 +1,4 @@
-#include "..\include\matrix.h"
+#include "..\include\matrix.hpp"
 
 Matrix::Matrix(const int v_size) {
     if (v_size <= 0) {
@@ -58,7 +58,7 @@ double& Matrix::operator () (const int row, const int column) {
 
 Matrix& Matrix::operator + (Matrix &m) {
 	if (this->n_row != m.n_row || this->n_column != m.n_column) {
-		cout << "Matrix sum: error in n_row/n_column\n";
+		cout << "Matrix sum1: error in n_row/n_column\n";
         exit(EXIT_FAILURE);
 	}
 	
@@ -73,9 +73,26 @@ Matrix& Matrix::operator + (Matrix &m) {
 	return *m_aux;
 }
 
+Matrix& Matrix::operator + (const double n) {
+	if (this->n_row < 0|| this->n_column < 0) {
+		cout << "Matrix sum2: error in n_row/n_column\n";
+        exit(EXIT_FAILURE);
+	}
+	
+	Matrix *m_aux = new Matrix(this->n_row, this->n_column);
+	
+    for(int i = 1; i <= this->n_row; i++) {
+        for(int j = 1; j <= this->n_column; j++) {
+			(*m_aux)(i,j) = (*this)(i,j) + n;
+		}
+	}
+	
+	return *m_aux;
+}
+
 Matrix& Matrix::operator - (Matrix &m) {
 	if (this->n_row != m.n_row || this->n_column != m.n_column) {
-		cout << "Matrix sub: error in n_row/n_column\n";
+		cout << "Matrix sub1: error in n_row/n_column\n";
         exit(EXIT_FAILURE);
 	}
 	
@@ -84,6 +101,23 @@ Matrix& Matrix::operator - (Matrix &m) {
     for(int i = 1; i <= this->n_row; i++) {
         for(int j = 1; j <= this->n_column; j++) {
 			(*m_aux)(i,j) = (*this)(i,j) - m(i,j);
+		}
+	}
+	
+	return *m_aux;
+}
+
+Matrix& Matrix::operator - (const double n) {
+	if (this->n_row < 0|| this->n_column < 0) {
+		cout << "Matrix sub2: error in n_row/n_column\n";
+        exit(EXIT_FAILURE);
+	}
+	
+	Matrix *m_aux = new Matrix(this->n_row, this->n_column);
+	
+    for(int i = 1; i <= this->n_row; i++) {
+        for(int j = 1; j <= this->n_column; j++) {
+			(*m_aux)(i,j) = (*this)(i,j) - n;
 		}
 	}
 	
@@ -113,8 +147,8 @@ Matrix& zeros(const int n_row, const int n_column) {
 }
 
 Matrix& Matrix::operator * (Matrix &m){
-	if (this->n_column != m.n_column) {
-		cout << "Matrix sum: error in n_row/n_column\n";
+	if (this->n_column != m.n_row) {
+		cout << "Matrix prod1: error in n_row/n_column\n";
         exit(EXIT_FAILURE);
 	}
 	
@@ -124,7 +158,7 @@ Matrix& Matrix::operator * (Matrix &m){
         for(int j = 1; j <= m.n_column; j++) {
 			int suma = 0;
 			for(int k = 1; k <= this->n_column; k++){
-				suma = (*this)(i, k)*m(k, j);
+				suma += (*this)(i, k)*m(k, j);
 			}
 			(*m_aux)(i,j) = suma;
 		}
@@ -133,9 +167,26 @@ Matrix& Matrix::operator * (Matrix &m){
 	return *m_aux;
 }
 
+Matrix& Matrix::operator * (const double n){
+	if (this->n_row < 0|| this->n_column < 0) {
+		cout << "Matrix prod2: error in n_row/n_column\n";
+        exit(EXIT_FAILURE);
+	}
+	
+	Matrix *m_aux = new Matrix(this->n_row, this->n_column);
+	
+    for(int i = 1; i <= this->n_row; i++) {
+        for(int j = 1; j <= this->n_column; j++) {
+			(*m_aux)(i,j) = (*this)(i,j) * n;
+		}
+	}
+	
+	return *m_aux;
+}
+
 Matrix& Matrix::operator / (Matrix &m){
 	if (this->n_column != m.n_column) {
-		cout << "Matrix sum: error in n_row/n_column\n";
+		cout << "Matrix div1: error in n_row/n_column\n";
         exit(EXIT_FAILURE);
 	}
 	
@@ -146,9 +197,26 @@ Matrix& Matrix::operator / (Matrix &m){
 	return *m_aux;
 }
 
+Matrix& Matrix::operator / (const double n){
+	if (this->n_column < 0) {
+		cout << "Matrix div2: error in n_row/n_column\n";
+        exit(EXIT_FAILURE);
+	}
+	
+	Matrix *m_aux = new Matrix(this->n_row, this->n_column);
+	
+    for(int i = 1; i <= this->n_row; i++) {
+        for(int j = 1; j <= this->n_column; j++) {
+			(*m_aux)(i,j) = (*this)(i,j) / n;
+		}
+	}
+	
+	return *m_aux;
+}
+
 Matrix& Matrix::operator = (Matrix &m){
 	if (this->n_row != m.n_row || this->n_column != m.n_column) {
-		cout << "Matrix sum: error in n_row/n_column\n";
+		cout << "Matrix equ: error in n_row/n_column\n";
         exit(EXIT_FAILURE);
 	}
 	
