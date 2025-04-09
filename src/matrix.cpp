@@ -124,11 +124,37 @@ Matrix& Matrix::operator * (Matrix &m){
         for(int j = 1; j <= m.n_column; j++) {
 			int suma = 0;
 			for(int k = 1; k <= this->n_column; k++){
-				suma = (*this)(i, k)*(k, j);
+				suma = (*this)(i, k)*m(k, j);
 			}
 			(*m_aux)(i,j) = suma;
 		}
 	}
+	
+	return *m_aux;
+}
+
+Matrix& Matrix::operator / (Matrix &m){
+	if (this->n_column != m.n_column) {
+		cout << "Matrix sum: error in n_row/n_column\n";
+        exit(EXIT_FAILURE);
+	}
+	
+	Matrix *m_aux = new Matrix(this->n_row, m.n_column);
+	
+    
+	
+	return *m_aux;
+}
+
+Matrix& Matrix::operator = (Matrix &m){
+	if (this->n_row != m.n_row || this->n_column != m.n_column) {
+		cout << "Matrix sum: error in n_row/n_column\n";
+        exit(EXIT_FAILURE);
+	}
+	
+	Matrix *m_aux = new Matrix(this->n_row, m.n_column);
+	
+    
 	
 	return *m_aux;
 }
