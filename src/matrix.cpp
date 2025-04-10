@@ -134,6 +134,16 @@ ostream& operator << (ostream &o, Matrix &m) {
     return o;
 }
 
+Matrix& zeros(const int v_size) {
+	Matrix *m_aux = new Matrix(1, v_size);
+	
+	for(int i = 1; i <= v_size; i++) {
+		(*m_aux)(1, i) = 0;
+	}
+	
+	return (*m_aux);
+}
+
 Matrix& zeros(const int n_row, const int n_column) {
 	Matrix *m_aux = new Matrix(n_row, n_column);
 	
@@ -220,9 +230,41 @@ Matrix& Matrix::operator = (Matrix &m){
         exit(EXIT_FAILURE);
 	}
 	
-	Matrix *m_aux = new Matrix(this->n_row, m.n_column);
+	Matrix *m_aux = new Matrix(this->n_row, this->n_column);
 	
-    
+    for(int i = 1; i <= this->n_row; i++) {
+        for(int j = 1; j <= this->n_column; j++) {
+			(*m_aux)(i,j) = ((*this)(i,j) = m(i,j));
+		}
+	}
+	
+	return *m_aux;
+}
+
+Matrix& transponse (Matrix &m){	
+	Matrix *m_aux = new Matrix(m.n_column, m.n_row);
+	
+    for(int i = 1; i <= m.n_row; i++) {
+        for(int j = 1; j <= m.n_column; j++) {
+			(*m_aux)(j,i) = m(i,j);
+		}
+	}
+	
+	return *m_aux;
+}
+
+Matrix& eye (const int n){	
+	Matrix *m_aux = new Matrix(n, n);
+	
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= n; j++) {
+			if(i != j){
+				(*m_aux)(i, j) = 0;
+			}else{
+				(*m_aux)(i, j) = 1;
+			}
+		}
+	}
 	
 	return *m_aux;
 }
