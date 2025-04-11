@@ -1,4 +1,7 @@
 #include "..\include\matrix.hpp"
+#include "..\include\R_x.hpp"
+#include "..\include\R_y.hpp"
+#include "..\include\R_z.hpp"
 #include <cstdio>
 #include <cmath>
 
@@ -229,6 +232,48 @@ int m_eye_01() {
     return 0;
 }
 
+int m_r_x_01() {
+	
+	Matrix A(3, 3);
+	A(1,1) = 1; A(1,2) = 0; A(1,3) = 0;
+	A(2,1) = 0; A(2,2) = -0.989992496600445; A(2,3) =  0.141120008059867;
+	A(3,1) = 0; A(3,2) = -0.141120008059867; A(3,3) = -0.989992496600445;
+	
+	Matrix R = R_x(3);
+    
+    _assert(m_equals(A, R, 1e-10));
+    
+    return 0;
+}
+
+int m_r_y_01() {
+	
+	Matrix A(3, 3);
+	A(1,1) = -0.989992496600445; A(1,2) = 0; A(1,3) = -0.141120008059867;
+	A(2,1) =  0; 				 A(2,2) = 1; A(2,3) = 0;
+	A(3,1) =  0.141120008059867; A(3,2) = 0; A(3,3) = -0.989992496600445;
+	
+	Matrix R = R_y(3);
+    
+    _assert(m_equals(A, R, 1e-10));
+    
+    return 0;
+}
+
+int m_r_z_01() {
+	
+	Matrix A(3, 3);
+	A(1,1) = -0.989992496600445; A(1,2) =  0.141120008059867; A(1,3) = 0;
+	A(2,1) = -0.141120008059867; A(2,2) = -0.989992496600445; A(2,3) = 0;
+	A(3,1) =  0; 				 A(3,2) =  0; 				  A(3,3) = 1;
+	
+	Matrix R = R_z(3);
+    
+    _assert(m_equals(A, R, 1e-10));
+    
+    return 0;
+}
+
 int all_tests()
 {
     _verify(m_sum_01);
@@ -241,6 +286,9 @@ int all_tests()
     _verify(m_equ_01);
     _verify(m_trans_01);
     _verify(m_eye_01);
+	
+	_verify(m_r_x_01);
+	_verify(m_r_y_01);
 
     return 0;
 }
