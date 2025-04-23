@@ -200,9 +200,7 @@ Matrix& Matrix::operator / (Matrix &m){
         exit(EXIT_FAILURE);
 	}
 	
-	Matrix *m_aux = new Matrix(this->n_row, m.n_column);
-	
-    
+	Matrix *m_aux = new Matrix((*this) * inv(m));
 	
 	return *m_aux;
 }
@@ -241,6 +239,51 @@ Matrix& Matrix::operator = (Matrix &m){
 	return *m_aux;
 }
 
+Matrix& inv (Matrix &m){	
+	if (m.n_row != m.n_column) {
+		cout << "Matrix inv: error in n_row/n_column\n";
+        exit(EXIT_FAILURE);
+	}
+	int n = m.n_row;
+	
+	Matrix *m_aux = new Matrix(n, n);
+    Matrix *identity = new Matrix(eye(n));
+
+    // Copia m en m_aux
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            (*m_aux)(i, j) = m(i, j);
+        }
+    }
+
+    // Realiza Gauss-Jordan
+    for (int i = 1; i <= n; i++) {
+        double diag = (*m_aux)(i, i);
+        if (diag == 0) {
+            cout << "Matrix inv: error, la matriz es singular\n";
+            exit(EXIT_FAILURE);
+        }
+
+        for (int j = 1; j <= n; j++) {
+            (*m_aux)(i, j) /= diag;
+            (*identity)(i, j) /= diag;
+        }
+
+        for (int k = 1; k <= n; k++) {
+            if (k != i) {
+                double factor = (*m_aux)(k, i);
+                for (int j = 1; j <= n; j++) {
+                    (*m_aux)(k, j) -= factor * (*m_aux)(i, j);
+                    (*identity)(k, j) -= factor * (*identity)(i, j);
+                }
+            }
+        }
+    }
+
+    return *identity;
+}
+
+
 Matrix& transponse (Matrix &m){	
 	Matrix *m_aux = new Matrix(m.n_column, m.n_row);
 	
@@ -267,4 +310,32 @@ Matrix& eye (const int n){
 	}
 	
 	return *m_aux;
+}
+
+double norm (Matrix &m){	
+	if (m.n_row != 1) {
+		cout << "Matrix norm: error in n_row\n";
+        exit(EXIT_FAILURE);
+	}
+	double ans = 0;
+	
+    for(int i = 0; i < m.n_column; i++){
+		ans += pow(m(1, i),2);
+	}
+	
+	return sqrt(ans);
+}
+
+double dot (Matrix &m){	
+	if (m.n_row != 1) {
+		cout << "Matrix norm: error in n_row\n";
+        exit(EXIT_FAILURE);
+	}
+	double ans = 0;
+	
+    for(int i = 0; i < m.n_column; i++){
+		ans += pow(m(1, i),2);
+	}
+	
+	return sqrt(ans);
 }

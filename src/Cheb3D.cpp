@@ -1,4 +1,4 @@
-#include "..\include\Cheb3D.hpp"
+/*#include "..\include\Cheb3D.hpp"
 
 Matrix Cheb3D(int t, int N, int Ta, int Tb, Matrix& Cx, Matrix& Cy, Matrix& Cz){
 	if ( (t<Ta) || (Tb<t) ){
@@ -21,4 +21,4 @@ Matrix Cheb3D(int t, int N, int Ta, int Tb, Matrix& Cx, Matrix& Cy, Matrix& Cz){
 	Matrix ChebApp = tau*f1-f2+[Cx(1),Cy(1),Cz(1)];
 	
 	return ChebApp;
-}
+}*/

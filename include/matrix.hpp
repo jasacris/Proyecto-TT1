@@ -40,7 +40,9 @@ ostream& operator << (ostream &o, Matrix &m);
 // Methods
 Matrix& zeros(const int v_size);
 Matrix& zeros(const int n_row, const int n_column);
+Matrix& inv (Matrix &m);
 Matrix& transponse (Matrix &m);
 Matrix& eye(const int n);
+double norm (Matrix &m);
 
 #endif
