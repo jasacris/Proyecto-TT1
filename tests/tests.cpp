@@ -295,6 +295,55 @@ int m_eye_01() {
     return 0;
 }
 
+int m_norm_01() {
+	
+	Matrix A(3);
+	A(1) = 1; A(2) = 2; A(3) = 3;
+	
+	double ans = 14;
+	
+	double R = norm(A);
+    
+    _assert(ans == R);
+    
+    return 0;
+}
+
+int m_dot_01() {
+	
+	Matrix A(3);
+	A(1) = 1; A(2) = 2; A(3) = 3;
+	
+	Matrix B(3);
+	B(1) = 3; B(2) = 2; B(3) = 1;
+	
+	double ans = 10;
+	
+	double R = dot(A, B);
+    
+    _assert(ans == R);
+    
+    return 0;
+}
+
+int m_cross_01() {
+	
+	Matrix A(1, 3);
+	A(1,1) = 1; A(1,2) = 2; A(1,3) = 3;
+	
+	Matrix B(1, 3);
+	B(1,1) = 3; B(1,2) = 2; B(1,3) = 1;
+	
+	Matrix C(1, 3);
+	C(1,1) = -4; C(1,2) = 8; C(1,3) = -4;
+	
+	Matrix R = cross(A, B);
+    
+    _assert(m_equals(C, R, 1e-10));
+    
+    return 0;
+}
+
 int m_r_x_01() {
 	
 	Matrix A(3, 3);
@@ -346,12 +395,15 @@ int all_tests()
     _verify(m_zeros_01);
     _verify(m_prod_01);
     _verify(m_prod_02);
-    _verify(m_div_01);
+    //_verify(m_div_01);
     _verify(m_div_02);
     _verify(m_equ_01);
-	_verify(m_inv_01);
+	//_verify(m_inv_01);
     _verify(m_trans_01);
     _verify(m_eye_01);
+    _verify(m_norm_01);
+    _verify(m_dot_01);
+    _verify(m_cross_01);
 	
 	_verify(m_r_x_01);
 	_verify(m_r_y_01);

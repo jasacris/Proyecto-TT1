@@ -1,5 +1,11 @@
 #include "..\include\matrix.hpp"
 
+Matrix::Matrix() {
+	this->n_row = 0;
+	this->n_column = 0;
+	this->data = nullptr;
+}
+
 Matrix::Matrix(const int v_size) {
     if (v_size <= 0) {
 		cout << "Matrix create: error in n_row/n_column\n";
@@ -40,7 +46,7 @@ Matrix::Matrix(const int n_row, const int n_column) {
 
 double& Matrix::operator () (const int n) {
 	if (n <= 0 || n > this->n_row*this->n_column) {
-		cout << "Matrix get: error in row/column\n";
+		cout << "Matrix get1: error in row/column\n";
         exit(EXIT_FAILURE);
 	}
 	
@@ -49,7 +55,7 @@ double& Matrix::operator () (const int n) {
 
 double& Matrix::operator () (const int row, const int column) {
 	if (row <= 0 || row > this->n_row || column <= 0 || column > this->n_column) {
-		cout << "Matrix get: error in row/column\n";
+		cout << "Matrix get2: error in row/column\n";
         exit(EXIT_FAILURE);
 	}
 	
@@ -319,23 +325,37 @@ double norm (Matrix &m){
 	}
 	double ans = 0;
 	
-    for(int i = 0; i < m.n_column; i++){
-		ans += pow(m(1, i),2);
+    for(int i = 0; i <= m.n_column; i++){
+		ans += pow(m(i),2);
 	}
 	
 	return sqrt(ans);
 }
 
-double dot (Matrix &m){	
-	if (m.n_row != 1) {
-		cout << "Matrix norm: error in n_row\n";
+double dot (Matrix &m1, Matrix &m2){	
+	if (m1.n_row != 1 || m2.n_row != 1 || m1.n_column != m2.n_column) {
+		cout << "Matrix dot: error in n_row\n";
         exit(EXIT_FAILURE);
 	}
 	double ans = 0;
 	
-    for(int i = 0; i < m.n_column; i++){
-		ans += pow(m(1, i),2);
+    for(int i=0; i <= m1.n_column; i++){
+		ans += m1(i) * m2(i);
 	}
 	
-	return sqrt(ans);
+	return ans;
+}
+
+Matrix& cross (Matrix &m1, Matrix &m2){	
+	if (m1.n_row != 1 || m2.n_row != 1 || m1.n_column != 3 || m2.n_column != 3) {
+		cout << "Matrix cross: error in n_row\n";
+        exit(EXIT_FAILURE);
+	}
+	Matrix *ans = new Matrix(3);
+	
+    (*ans)(1) = m1(2) * m2(3) - m1(3) * m2(2);
+	(*ans)(2) = m1(3) * m2(1) - m1(1) * m2(3);
+	(*ans)(3) = m1(1) * m2(2) - m1(2) * m2(1);
+	
+	return *ans;
 }

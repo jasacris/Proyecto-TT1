@@ -14,6 +14,7 @@ public:
 	double **data;
 
     // Parameterized constructor
+	Matrix();
 	Matrix(const int v_size);
     Matrix(const int n_row, const int n_column);
 	
@@ -44,5 +45,7 @@ Matrix& inv (Matrix &m);
 Matrix& transponse (Matrix &m);
 Matrix& eye(const int n);
 double norm (Matrix &m);
+double dot (Matrix &m1, Matrix &m2);
+Matrix& cross (Matrix &m1, Matrix &m2);
 
 #endif
