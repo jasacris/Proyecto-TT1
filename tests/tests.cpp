@@ -2,6 +2,7 @@
 #include "..\include\R_x.hpp"
 #include "..\include\R_y.hpp"
 #include "..\include\R_z.hpp"
+#include "..\include\Cheb3D.hpp"
 #include <cstdio>
 #include <cmath>
 
@@ -298,9 +299,9 @@ int m_eye_01() {
 int m_norm_01() {
 	
 	Matrix A(3);
-	A(1) = 1; A(2) = 2; A(3) = 3;
+	A(1) = 4; A(2) = 0; A(3) = 3;
 	
-	double ans = 14;
+	double ans = 5;
 	
 	double R = norm(A);
     
@@ -344,20 +345,15 @@ int m_cross_01() {
     return 0;
 }
 
-
-	
-	Matrix& union_vector(Matrix &m);
-	Matrix& extract_vector(const int from, const int to);
-
 int m_assign_column_01() {
 
-	Matrix A(3, 1);
-	A(1,1) = 1; A(2,1) = 2; A(3,1) = 3;
+	Matrix A(1, 3);
+	A(1,1) = 1; A(1, 2) = 2; A(1,3) = 3;
 	
 	Matrix B(3, 1);
 	B(1,1) = 4; B(2,1) = 5; B(3,1) = 6;
 	
-	Matrix R = B.assign_column(A, 1);
+	Matrix R = transponse(B.assign_column(A, 1));
 	
 	_assert(m_equals(A, R, 1e-10));
 	
@@ -384,7 +380,7 @@ int m_extract_column_01() {
 	Matrix A(3, 1);
 	A(1,1) = 1; A(2,1) = 2; A(3,1) = 3;
 	
-	Matrix R = A.extract_column(1);
+	Matrix R = transponse(A.extract_column(1));
 	
 	_assert(m_equals(A, R, 1e-10));
 	
@@ -480,6 +476,20 @@ int m_r_z_01() {
     return 0;
 }
 
+int m_Cheb_01() {
+	
+	Matrix A(3, 3);
+	A(1,1) = -0.989992496600445; A(1,2) =  0.141120008059867; A(1,3) = 0;
+	A(2,1) = -0.141120008059867; A(2,2) = -0.989992496600445; A(2,3) = 0;
+	A(3,1) =  0; 				 A(3,2) =  0; 				  A(3,3) = 1;
+	
+	Matrix R = Cheb3D();
+    
+    _assert(m_equals(A, R, 1e-10));
+    
+    return 0;
+}
+
 int all_tests()
 {
     _verify(m_sum_01);
@@ -498,10 +508,17 @@ int all_tests()
     _verify(m_norm_01);
     _verify(m_dot_01);
     _verify(m_cross_01);
+    _verify(m_assign_column_01);
+    _verify(m_assign_row_01);
+    _verify(m_extract_column_01);
+    _verify(m_extract_row_01);
+    _verify(m_union_vector_01);
+    _verify(m_extract_vector_01);
 	
 	_verify(m_r_x_01);
 	_verify(m_r_y_01);
 	_verify(m_r_z_01);
+	_verify(m_Cheb_01);
 
     return 0;
 }

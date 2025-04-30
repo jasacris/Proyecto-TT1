@@ -11,23 +11,23 @@ Matrix Cheb3D(int t, int N, int Ta, int Tb, Matrix& Cx, Matrix& Cy, Matrix& Cz){
 
 	Matrix f1 = zeros(1,3);
 	Matrix f2 = zeros(1,3);
-	Matrix old_f1 = new Matrix(3);
+	Matrix old_f1(3);
 
-	Matrix aux = new Matrix(3);
+	Matrix aux(3);
 
-	for (i=N; i<=3; i++){
-		*old_f1 = f1;
+	for (int i=N; i<=3; i++){
+		old_f1 = f1;
 		aux(1) = Cx(i);
 		aux(2) = Cy(i);
 		aux(3) = Cz(i);
-		f1 = 2*tau*f1-f2+aux;
-		f2 = *old_f1;
+		f1 = f1*2*tau-f2+aux;
+		f2 = old_f1;
 	}
 
 	aux(1) = Cx(1);
 	aux(2) = Cy(1);
 	aux(3) = Cz(1);
-	Matrix ChebApp = tau*f1-f2+aux;
+	Matrix ChebApp = f1*tau-f2+aux;
 	
 	return ChebApp;
 }

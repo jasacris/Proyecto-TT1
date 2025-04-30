@@ -265,11 +265,11 @@ Matrix& inv (Matrix &m){
     // Realiza Gauss-Jordan
     for (int i = 1; i <= n; i++) {
 		int piv = i;
-        double diag = abs((*m_aux)(i, i));
+        double diag = (*m_aux)(i, i);
 
 		for (int j = i + 1; j <= n; j++) {
-            if (abs(*m_aux(i, j)) > diag) {
-                diag = abs(*m_aux(i, j));
+            if (abs((*m_aux)(j, i)) > abs(diag)) {
+                diag = (*m_aux)(j, i);
                 piv = j;
             }
         }
@@ -281,8 +281,12 @@ Matrix& inv (Matrix &m){
 
 		if(piv != i){
 			Matrix& mAux = (*m_aux).extract_row(piv);
-			(*m_aux).assign_row(piv, (*m_aux).extract_row(i));
-			(*m_aux).assign_row(i, mAux);
+			(*m_aux).assign_row((*m_aux).extract_row(i), piv);
+			(*m_aux).assign_row(mAux, i);
+			
+			mAux = (*identity).extract_row(piv);
+			(*identity).assign_row((*identity).extract_row(i), piv);
+			(*identity).assign_row(mAux, i);
 		}
 
         for (int j = 1; j <= n; j++) {
@@ -340,7 +344,7 @@ double norm (Matrix &m){
 	}
 	double ans = 0;
 	
-    for(int i = 0; i <= m.n_column; i++){
+    for(int i = 1; i <= m.n_column; i++){
 		ans += pow(m(i),2);
 	}
 	
@@ -354,7 +358,7 @@ double dot (Matrix &m1, Matrix &m2){
 	}
 	double ans = 0;
 	
-    for(int i=0; i <= m1.n_column; i++){
+    for(int i=1; i <= m1.n_column; i++){
 		ans += m1(i) * m2(i);
 	}
 	
@@ -425,7 +429,7 @@ Matrix& Matrix::extract_row(const int row){
 	Matrix *m = new Matrix(this->n_column);
 
 	for (int j = 1; j <= this->n_column; j++){
-		(*m)(j) = (*this)(row, j);
+		(*m)(1, j) = (*this)(row, j);
 	}
 
 	return *m;
@@ -440,12 +444,14 @@ Matrix& Matrix::union_vector(Matrix &m){
 	int tamano = this->n_column + m.n_column;
 	Matrix *m_aux = new Matrix(tamano);
 
-	int aux = 0;
+	int aux = 1;
 	for (int i = 1; i <= this->n_column; i++){
-		(*m_aux)(aux++) = (*this)(i);
+		(*m_aux)(1, aux) = (*this)(i);
+		aux++;
 	}
-	for (int i = 1; i <= v.n_column; i++){
-		(*m_aux)(aux++) = m(i);
+	for (int i = 1; i <= m.n_column; i++){
+		(*m_aux)(1, aux) = m(i);
+		aux++;
 	}
 
 	return *m_aux;
@@ -460,9 +466,10 @@ Matrix& Matrix::extract_vector(const int from, const int to){
 	int sub_size = to - from + 1;
 	Matrix *m = new Matrix(sub_size);
 
-	int index = 0;
+	int index = 1;
 	for (int i = from; i <= to; i++){
-		(*m)(index++) = (*this)(i);
+		(*m)(index) = (*this)(i);
+		index++;
 	}
 
 	return *m;
