@@ -250,7 +250,7 @@ Matrix& inv (Matrix &m){
 		cout << "Matrix inv: error in n_row/n_column\n";
         exit(EXIT_FAILURE);
 	}
-	int n = m.n_row;
+	int n = m.n_row; 
 	
 	Matrix *m_aux = new Matrix(n, n);
     Matrix *identity = new Matrix(eye(n));
@@ -264,11 +264,26 @@ Matrix& inv (Matrix &m){
 
     // Realiza Gauss-Jordan
     for (int i = 1; i <= n; i++) {
-        double diag = (*m_aux)(i, i);
+		int piv = i;
+        double diag = abs((*m_aux)(i, i));
+
+		for (int j = i + 1; j <= n; j++) {
+            if (abs(*m_aux(i, j)) > diag) {
+                diag = abs(*m_aux(i, j));
+                piv = j;
+            }
+        }
+
         if (diag == 0) {
             cout << "Matrix inv: error, la matriz es singular\n";
             exit(EXIT_FAILURE);
         }
+
+		if(piv != i){
+			Matrix& mAux = (*m_aux).extract_row(piv);
+			(*m_aux).assign_row(piv, (*m_aux).extract_row(i));
+			(*m_aux).assign_row(i, mAux);
+		}
 
         for (int j = 1; j <= n; j++) {
             (*m_aux)(i, j) /= diag;
@@ -358,4 +373,97 @@ Matrix& cross (Matrix &m1, Matrix &m2){
 	(*ans)(3) = m1(1) * m2(2) - m1(2) * m2(1);
 	
 	return *ans;
+}
+
+Matrix& Matrix::assign_column(Matrix &m, const int col){
+	if (col < 1 || col > this->n_column || m.n_row != 1){
+		cout << "Matrix assign_column: error in n_row/n_column\n";
+		exit(EXIT_FAILURE);
+	}		
+
+	for (int i = 1; i <= this->n_row; i++){
+		(*this)(i, col) = m(i);
+	}
+
+	return *this;
+}
+
+Matrix& Matrix::assign_row(Matrix &m, const int row){
+	if (row < 1 || row > this->n_row || m.n_row != 1){
+		cout << "Matrix assign_row: error in n_row/n_column\n";
+		exit(EXIT_FAILURE);
+	}
+
+	for (int j = 1; j <= this->n_column; j++){
+		(*this)(row, j) = m(j);
+	}
+
+	return *this;
+}
+
+Matrix& Matrix::extract_column(const int col){
+	if (col < 1 || col > this->n_column){
+		cout << "Matrix extract_column: error in n_row/n_column\n";
+		exit(EXIT_FAILURE);
+	}
+
+	Matrix *m = new Matrix(this->n_row);
+
+	for (int i = 1; i <= this->n_row; i++){
+		(*m)(i) = (*this)(i, col);
+	}
+
+	return *m;
+}
+
+Matrix& Matrix::extract_row(const int row){
+	if (row < 1 || row > this->n_row){
+		cout << "Matrix extract_row: error in n_row/n_column\n";
+		exit(EXIT_FAILURE);
+	}
+
+	Matrix *m = new Matrix(this->n_column);
+
+	for (int j = 1; j <= this->n_column; j++){
+		(*m)(j) = (*this)(row, j);
+	}
+
+	return *m;
+}
+
+Matrix& Matrix::union_vector(Matrix &m){
+	if (this->n_row != 1 || m.n_row != 1){
+		cout << "Matrix union_vector: error in n_row\n";
+		exit(EXIT_FAILURE);
+	}
+
+	int tamano = this->n_column + m.n_column;
+	Matrix *m_aux = new Matrix(tamano);
+
+	int aux = 0;
+	for (int i = 1; i <= this->n_column; i++){
+		(*m_aux)(aux++) = (*this)(i);
+	}
+	for (int i = 1; i <= v.n_column; i++){
+		(*m_aux)(aux++) = m(i);
+	}
+
+	return *m_aux;
+}
+
+Matrix& Matrix::extract_vector(const int from, const int to){
+	if (this->n_row != 1 || from <= 0 || to > this->n_column || from > to){
+		cout << "Matrix extract_vector: error in n_row\n";
+		exit(EXIT_FAILURE);
+	}
+
+	int sub_size = to - from + 1;
+	Matrix *m = new Matrix(sub_size);
+
+	int index = 0;
+	for (int i = from; i <= to; i++){
+		(*m)(index++) = (*this)(i);
+	}
+
+	return *m;
 }

@@ -304,7 +304,7 @@ int m_norm_01() {
 	
 	double R = norm(A);
     
-    _assert(ans == R);
+    _assert(fabs(R - ans) < 1e-10);
     
     return 0;
 }
@@ -321,7 +321,7 @@ int m_dot_01() {
 	
 	double R = dot(A, B);
     
-    _assert(ans == R);
+    _assert(fabs(R - ans) < 1e-10);
     
     return 0;
 }
@@ -343,6 +343,100 @@ int m_cross_01() {
     
     return 0;
 }
+
+
+	
+	Matrix& union_vector(Matrix &m);
+	Matrix& extract_vector(const int from, const int to);
+
+int m_assign_column_01() {
+
+	Matrix A(3, 1);
+	A(1,1) = 1; A(2,1) = 2; A(3,1) = 3;
+	
+	Matrix B(3, 1);
+	B(1,1) = 4; B(2,1) = 5; B(3,1) = 6;
+	
+	Matrix R = B.assign_column(A, 1);
+	
+	_assert(m_equals(A, R, 1e-10));
+	
+	return 0;
+}
+
+int m_assign_row_01() {
+	
+	Matrix A(1, 3);
+	A(1,1) = 1; A(1,2) = 2; A(1,3) = 3;
+	
+	Matrix B(1, 3);
+	B(1,1) = 4; B(1,2) = 5; B(1,3) = 6;
+	
+	Matrix R = B.assign_row(A, 1);
+    
+    _assert(m_equals(A, R, 1e-10));
+    
+    return 0;
+}
+
+int m_extract_column_01() {
+
+	Matrix A(3, 1);
+	A(1,1) = 1; A(2,1) = 2; A(3,1) = 3;
+	
+	Matrix R = A.extract_column(1);
+	
+	_assert(m_equals(A, R, 1e-10));
+	
+	return 0;
+}
+
+int m_extract_row_01() {
+	
+	Matrix A(1, 3);
+	A(1,1) = 1; A(1,2) = 2; A(1,3) = 3;
+	
+	Matrix R = A.extract_row(1);
+    
+    _assert(m_equals(A, R, 1e-10));
+    
+    return 0;
+}
+
+int m_union_vector_01() {
+	
+	Matrix A(1, 3);
+	A(1,1) = 1; A(1,2) = 2; A(1,3) = 3;
+	
+	Matrix B(1, 3);
+	B(1,1) = 4; B(1,2) = 5; B(1,3) = 6;
+
+	Matrix C(1, 6);
+	C(1,1) = 1; C(1,2) = 2; C(1,3) = 3;
+	C(1,4) = 4; C(1,5) = 5; C(1,6) = 6;
+	
+	Matrix R = A.union_vector(B);
+    
+    _assert(m_equals(C, R, 1e-10));
+    
+    return 0;
+}
+
+int m_extract_vector_01() {
+	
+	Matrix A(1, 5);
+	A(1,1) = 1; A(1,2) = 2; A(1,3) = 3; A(1,4) = 4; A(1, 5) = 5;
+	
+	Matrix B(1, 3);
+	B(1,1) = 2; B(1,2) = 3; B(1,3) = 4;
+	
+	Matrix R = A.extract_vector(2, 4);
+    
+    _assert(m_equals(B, R, 1e-10));
+    
+    return 0;
+}
+
 
 int m_r_x_01() {
 	
@@ -395,10 +489,10 @@ int all_tests()
     _verify(m_zeros_01);
     _verify(m_prod_01);
     _verify(m_prod_02);
-    //_verify(m_div_01);
+    _verify(m_div_01);
     _verify(m_div_02);
     _verify(m_equ_01);
-	//_verify(m_inv_01);
+	_verify(m_inv_01);
     _verify(m_trans_01);
     _verify(m_eye_01);
     _verify(m_norm_01);

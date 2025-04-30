@@ -30,6 +30,12 @@ public:
 	Matrix& operator - (const double n);
 	Matrix& operator * (const double n);
 	Matrix& operator / (const double n);
+	Matrix& assign_column(Matrix &m, const int col);
+	Matrix& assign_row(Matrix &m, const int row);
+	Matrix& extract_column(const int col);
+	Matrix& extract_row(const int row);
+	Matrix& union_vector(Matrix &m);
+	Matrix& extract_vector(const int from, const int to);
 	
 	// Non-member operators
 	friend ostream& operator << (ostream &o, Matrix &m);
