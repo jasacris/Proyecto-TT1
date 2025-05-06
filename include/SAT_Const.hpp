@@ -1,7 +1,9 @@
-#ifndef _SAT_CONST_
+/*#ifndef _SAT_CONST_
 #define _SAT_CONST_
 
-#include "math.h"
+#define _USE_MATH_DEFINES
+
+#include <math.h>
 
 struct Constants {
     // Constantes matemáticas
@@ -41,4 +43,4 @@ struct Constants {
     // Presión de radiación solar a 1 UA
     const double P_Sol = 1367 / c_light; // [N/m^2] (~1367 W/m^2)
 };
-#endif
+#endif*/

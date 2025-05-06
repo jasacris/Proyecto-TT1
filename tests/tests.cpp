@@ -6,6 +6,13 @@
 #include "..\include\Cheb3D.hpp"
 #include "..\include\EccAnom.hpp"
 #include "..\include\Frac.hpp"
+#include "..\include\MeanObliquity.hpp"
+#include "..\include\Mjday.hpp"
+#include "..\include\Mjday_TDB.hpp"
+#include "..\include\Position.hpp"
+#include "..\include\sign_.hpp"
+#include "..\include\timediff.hpp"
+#include "..\include\AzElPa.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -549,6 +556,133 @@ int m_Frac_01() {
     
     return 0;
 }
+/*
+int m_MeanObli_01() {
+
+	double x = 5;
+
+	double ans = 0.4094;
+
+	double R = MeanObliquity(x);
+    
+    _assert(fabs(R - ans) < 1e-10);
+    
+    return 0;
+}*/
+
+int m_Mjday_01() {
+
+	double ans = -674450.5762731482;
+
+	double R = Mjday(12, 05, 02, 10, 10, 10);
+    
+    _assert(fabs(R - ans) < 1e-9);
+    
+    return 0;
+}
+
+int m_Mjday_02() {
+
+	double ans = -674451;
+
+	double R = Mjday(12, 05, 02);
+    
+    _assert(fabs(R - ans) < 1e-9);
+    
+    return 0;
+}
+
+int m_MjdayTDB_01() {
+
+	double ans = 4.999999987541869;
+
+	double R = Mjday_TDB(5);
+    
+    _assert(fabs(R - ans) < 1e-9);
+    
+    return 0;
+}
+/*
+int m_Position_01() {
+	
+	double lon = 0.5;
+	double lat = 0;
+	double h = 1;
+
+	Matrix C(3);
+	C(1) = -1438078.785611559; C(2) =  -2239675.009373783; C(3) = 5776810.445003163;
+	
+	Matrix R = Position(lon, lat, h);
+    
+    _assert(m_equals(C, R, 1e-10));
+    
+    return 0;
+}*/
+
+int m_sign__01() {
+
+	double ans = 2;
+
+	double R = sign_(2, 2);
+    
+    _assert(fabs(R - ans) < 1e-9);
+    
+    return 0;
+}
+
+int m_sign__02() {
+
+	double ans = -2;
+
+	double R = sign_(2, -2);
+    
+    _assert(fabs(R - ans) < 1e-9);
+    
+    return 0;
+}
+
+int m_timediff_01(){
+
+    double UT1_UTC = 3;
+    double TAI_UTC = 5;
+
+    auto [UT1_TAI, UTC_GPS, UT1_GPS, TT_UTC, GPS_UTC] = timediff(UT1_UTC, TAI_UTC);
+
+    double ans_UT1_TAI = -2;
+    double ans_UTC_GPS = 14;
+    double ans_UT1_GPS = 17;
+    double ans_TT_UTC = 37.184;
+    double ans_GPS_UTC = -14;
+
+    _assert(fabs(UT1_TAI - ans_UT1_TAI)< 1e-10);
+    _assert(fabs(UTC_GPS - ans_UTC_GPS)< 1e-10);
+    _assert(fabs(UT1_GPS - ans_UT1_GPS)< 1e-10);
+    _assert(fabs(TT_UTC - ans_TT_UTC)< 1e-10);
+    _assert(fabs(GPS_UTC - ans_GPS_UTC)< 1e-10);
+	
+    return 0;
+}
+
+int m_AzElPa_01(){
+
+    Matrix s(3);
+	
+	s(1) = 1; s(2) = 2; s(3) = 3;
+
+    auto [Az, El, dAds, dEds] = AzElPa(s);
+
+    double ans_Az = 1.32857846;
+    double ans_El = 14;
+    Matrix ans_dAds = 17;
+    Matrix ans_dEds = 37.184;
+
+    _assert(fabs(Az - ans_Az)< 1e-10);
+    _assert(fabs(El - ans_El)< 1e-10);
+    _assert(m_equals(dAds, ans_dAds, 1e-10));
+    _assert(m_equals(dEds, ans_dEds, 1e-10));
+	
+    return 0;
+}
 
 int all_tests()
 {
@@ -582,6 +716,15 @@ int all_tests()
 	_verify(m_Cheb_01);
 	_verify(m_EccAnom_01);
 	_verify(m_Frac_01);
+	//_verify(m_MeanObli_01);
+	_verify(m_Mjday_01);
+	_verify(m_Mjday_02);
+	_verify(m_MjdayTDB_01);
+	//_verify(m_Position_01);
+	_verify(m_sign__01);
+	_verify(m_sign__02);
+	_verify(m_timediff_01);
+	_verify(m_AzElPa_01);
 
     return 0;
 }

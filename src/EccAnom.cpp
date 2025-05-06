@@ -4,7 +4,7 @@ double EccAnom(double M, double e){
     int maxit = 15;
     int i = 1;
 
-    M = M % (2.0*M_PI);
+    M = fmod(M, 2.0*M_PI);
 
     double E;
     if(e < 0.8){
@@ -16,7 +16,7 @@ double EccAnom(double M, double e){
     double f = E - e * sin(E) - M;
     E = E - f / (1.0 - e * cos(E));
 
-    while(abs(f) > 1e2*eps){
+    while(abs(f) > 1e2*std::numeric_limits<double>::epsilon()){
         f = E - e * sin(E) - M;
         E = E - f / (1.0 - e * cos(E));
         i++;

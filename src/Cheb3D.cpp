@@ -9,13 +9,13 @@ Matrix Cheb3D(double t, int N, double Ta, double Tb, Matrix& Cx, Matrix& Cy, Mat
 	// Clenshaw algorithm
 	double tau = (2*t-Ta-Tb)/(Tb-Ta);  
 
-	Matrix f1 = zeros(1,3);
-	Matrix f2 = zeros(1,3);
+	Matrix f1 = zeros(3);
+	Matrix f2 = zeros(3);
 	Matrix old_f1(3);
 
 	Matrix aux(3);
 
-	for (int i=N; i<=3; i++){
+	for (int i=N; i >= 2; i--){
 		old_f1 = f1;
 		aux(1) = Cx(i);
 		aux(2) = Cy(i);
