@@ -2,7 +2,11 @@
 #include "..\include\R_x.hpp"
 #include "..\include\R_y.hpp"
 #include "..\include\R_z.hpp"
+#include "..\include\AccelPointMass.hpp"
 #include "..\include\Cheb3D.hpp"
+#include "..\include\EccAnom.hpp"
+#include "..\include\Frac.hpp"
+
 #include <cstdio>
 #include <cmath>
 
@@ -476,16 +480,72 @@ int m_r_z_01() {
     return 0;
 }
 
+int m_AccelPointMass_01(){
+    Matrix r(3);
+    r(1)=1; r(2)=2; r(3)=3;
+
+    Matrix s(3);
+    s(1)=4; s(2)=5; s(3)=6;
+
+	Matrix C(3);
+	C(1) = 0.0463899400720928; C(2) =  0.0419499176126264; C(3) = 0.0375098951531599;
+
+    Matrix R = AccelPointMass(r,s,3);
+
+    _assert(m_equals(C, R, 1e-10));
+    return 0;
+}
+
 int m_Cheb_01() {
 	
-	Matrix A(3, 3);
-	A(1,1) = -0.989992496600445; A(1,2) =  0.141120008059867; A(1,3) = 0;
-	A(2,1) = -0.141120008059867; A(2,2) = -0.989992496600445; A(2,3) = 0;
-	A(3,1) =  0; 				 A(3,2) =  0; 				  A(3,3) = 1;
+	int N = 3;
+
+	double t = 0.5;
+	double Ta = 0;
+	double Tb = 1;
+
+	Matrix Cx(3);
+	Cx(1) = 1; Cx(2) =  2; Cx(3) = 2;
+
+	Matrix Cy(3);
+	Cy(1) = 1; Cy(2) =  2; Cy(3) = 2;
+
+	Matrix Cz(3);
+	Cz(1) = 1; Cz(2) =  2; Cz(3) = 2;
+
+	Matrix C(3);
+	C(1) = -1; C(2) =  -1; C(3) = -1;
 	
-	Matrix R = Cheb3D();
+	Matrix R = Cheb3D(t, N, Ta, Tb, Cx, Cy, Cz);
     
-    _assert(m_equals(A, R, 1e-10));
+    _assert(m_equals(C, R, 1e-10));
+    
+    return 0;
+}
+
+int m_EccAnom_01() {
+
+	double M = 2.5;
+	double e = 3.5;
+
+	double ans = 2.99863819328014;
+	
+	double R = EccAnom(M, e);
+    
+    _assert(fabs(R - ans) < 1e-10);
+    
+    return 0;
+}
+
+int m_Frac_01() {
+
+	double x = 5.6;
+
+	double ans = 0.6;
+
+	double R = Frac(x);
+    
+    _assert(fabs(R - ans) < 1e-10);
     
     return 0;
 }
@@ -518,7 +578,10 @@ int all_tests()
 	_verify(m_r_x_01);
 	_verify(m_r_y_01);
 	_verify(m_r_z_01);
+	_verify(m_AccelPointMass_01);
 	_verify(m_Cheb_01);
+	_verify(m_EccAnom_01);
+	_verify(m_Frac_01);
 
     return 0;
 }
