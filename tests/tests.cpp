@@ -672,9 +672,17 @@ int m_AzElPa_01(){
     auto [Az, El, dAds, dEds] = AzElPa(s);
 
     double ans_Az = 1.32857846;
-    double ans_El = 14;
-    Matrix ans_dAds = 17;
-    Matrix ans_dEds = 37.184;
+    double ans_El = 0.9302740141;
+
+    Matrix ans_dAds(3);
+
+	ans_dAds(1) = 0.4; ans_dAds(2) = -0.2; ans_dAds(3) = 0.0;
+
+    Matrix ans_dEds(3);
+
+	double dot = dot(s,s);
+
+	ans_dEds(1) = -0.6/dot; ans_dEds(2) = -2.683281573/dot; ans_dEds(3) = 2.230667977/dot;
 
     _assert(fabs(Az - ans_Az)< 1e-10);
     _assert(fabs(El - ans_El)< 1e-10);
