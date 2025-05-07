@@ -13,8 +13,8 @@ tuple<double,double,Matrix&,Matrix&> AzElPa(Matrix &s){
 	
 	double El = atan ( s(3) / rho );
 	
-	Matrix dAds(3);
-	Matrix dEds(3);
+	Matrix& dAds = zeros(3);
+	Matrix& dEds = zeros(3);
 	
 	dAds(1) = s(2)/(rho*rho);
 	dAds(2) = -s(1)/(rho*rho);

@@ -1,10 +1,9 @@
-/*#include "..\include\Position.hpp"
+#include "..\include\Position.hpp"
 
 Matrix Position(double lon, double lat, double h){
-	Constants constants;
 	
-	double R_equ = constants.R_Earth;
-	double f = constants.f_Earth;
+	double R_equ = R_Earth;
+	double f = f_Earth;
 
 	double e2 = f*(2.0-f);
 	double CosLat = cos(lat);
@@ -19,4 +18,4 @@ Matrix Position(double lon, double lat, double h){
 	r(3) =  ((1.0-e2)*N+h)*SinLat;
 	
 	return r;
-}*/
+}

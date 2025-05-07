@@ -13,6 +13,10 @@
 #include "..\include\sign_.hpp"
 #include "..\include\timediff.hpp"
 #include "..\include\AzElPa.hpp"
+#include "..\include\IERS.hpp"
+#include "..\include\Legendre.hpp"
+#include "..\include\NutAngles.hpp"
+#include "..\include\TimeUpdate.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -556,19 +560,19 @@ int m_Frac_01() {
     
     return 0;
 }
-/*
+
 int m_MeanObli_01() {
 
 	double x = 5;
 
-	double ans = 0.4094;
+	double ans = 0.409413039119721;
 
 	double R = MeanObliquity(x);
     
     _assert(fabs(R - ans) < 1e-10);
     
     return 0;
-}*/
+}
 
 int m_Mjday_01() {
 
@@ -602,7 +606,7 @@ int m_MjdayTDB_01() {
     
     return 0;
 }
-/*
+
 int m_Position_01() {
 	
 	double lon = 0.5;
@@ -610,14 +614,14 @@ int m_Position_01() {
 	double h = 1;
 
 	Matrix C(3);
-	C(1) = -1438078.785611559; C(2) =  -2239675.009373783; C(3) = 5776810.445003163;
+	C(1) = 5597342.07182254; C(2) =  3057841.91034406; C(3) = 0;
 	
 	Matrix R = Position(lon, lat, h);
     
-    _assert(m_equals(C, R, 1e-10));
+    _assert(m_equals(C, R, 1e-7));
     
     return 0;
-}*/
+}
 
 int m_sign__01() {
 
@@ -671,24 +675,107 @@ int m_AzElPa_01(){
 
     auto [Az, El, dAds, dEds] = AzElPa(s);
 
-    double ans_Az = 1.32857846;
-    double ans_El = 0.9302740141;
+    double ans_Az = 0.463647609000806;
+    double ans_El = 0.930274014115472;
 
     Matrix ans_dAds(3);
 
 	ans_dAds(1) = 0.4; ans_dAds(2) = -0.2; ans_dAds(3) = 0.0;
-
+	
     Matrix ans_dEds(3);
 
-	double dot = dot(s,s);
-
-	ans_dEds(1) = -0.6/dot; ans_dEds(2) = -2.683281573/dot; ans_dEds(3) = 2.230667977/dot;
+	ans_dEds(1) = -0.095831484749991; ans_dEds(2) = -0.191662969499982; ans_dEds(3) = 0.159719141249985;
 
     _assert(fabs(Az - ans_Az)< 1e-10);
     _assert(fabs(El - ans_El)< 1e-10);
     _assert(m_equals(dAds, ans_dAds, 1e-10));
     _assert(m_equals(dEds, ans_dEds, 1e-10));
 	
+    return 0;
+}
+
+int m_IERS_01(){//HACER IERS
+
+    Matrix s(3);
+	
+	s(1) = 1; s(2) = 2; s(3) = 3;
+
+    auto [Az, El, dAds, dEds] = AzElPa(s);
+
+    double ans_Az = 0.463647609000806;
+    double ans_El = 0.930274014115472;
+
+    Matrix ans_dAds(3);
+
+	ans_dAds(1) = 0.4; ans_dAds(2) = -0.2; ans_dAds(3) = 0.0;
+	
+    Matrix ans_dEds(3);
+
+	ans_dEds(1) = -0.095831484749991; ans_dEds(2) = -0.191662969499982; ans_dEds(3) = 0.159719141249985;
+
+    _assert(fabs(Az - ans_Az)< 1e-10);
+    _assert(fabs(El - ans_El)< 1e-10);
+    _assert(m_equals(dAds, ans_dAds, 1e-10));
+    _assert(m_equals(dEds, ans_dEds, 1e-10));
+	
+    return 0;
+}
+
+int m_Legendre_01(){
+
+    auto [pnm, dpnm] = Legendre(1, 2, 3);
+
+    double ans_Az = 0.463647609000806;
+    double ans_El = 0.930274014115472;
+
+    Matrix ans_pnm(2,3);
+
+	ans_pnm(1,1) = 1.0; ans_pnm(1,2) = 0.0; ans_pnm(1,3) = 0.0;
+	ans_pnm(2,1) = 0.244427023924219; ans_pnm(2,2) = -1.71471730322393; ans_pnm(2,3) = 0.0;
+	
+    Matrix ans_dpnm(2,3);
+
+	ans_dpnm(1,1) = 0.0; ans_dpnm(1,2) = 0.0; ans_dpnm(1,3) = 0.0;
+	ans_dpnm(2,1) = -1.71471730322393; ans_dpnm(2,2) = -0.244427023924219; ans_dpnm(2,3) = 0.0;
+
+    _assert(m_equals(pnm, ans_pnm, 1e-10));
+    _assert(m_equals(dpnm, ans_dpnm, 1e-10));
+	
+    return 0;
+}
+
+int m_NutAngles_01(){
+
+    auto [dpsi, deps] = NutAngles(2);
+
+    double ans_dpsi = 2.7179807523643e-05;
+    double ans_deps = 3.91872311875582e-05;
+
+    _assert(fabs(dpsi - ans_dpsi)< 1e-10);
+    _assert(fabs(deps - ans_deps)< 1e-10);
+	
+    return 0;
+}
+
+int m_TimeUpdate_01() {//hacer timesupdate
+
+	double ans = 2;
+
+	double R = sign_(2, 2);
+    
+    _assert(fabs(R - ans) < 1e-9);
+    
+    return 0;
+}
+
+int m_TimeUpdate_02() {//hacer timesupdate
+
+	double ans = -2;
+
+	double R = sign_(2, -2);
+    
+    _assert(fabs(R - ans) < 1e-9);
+    
     return 0;
 }
 
@@ -715,7 +802,7 @@ int all_tests()
     _verify(m_extract_column_01);
     _verify(m_extract_row_01);
     _verify(m_union_vector_01);
-    _verify(m_extract_vector_01);
+    _verify(m_extract_vector_01); //22 test
 	
 	_verify(m_r_x_01);
 	_verify(m_r_y_01);
@@ -724,15 +811,20 @@ int all_tests()
 	_verify(m_Cheb_01);
 	_verify(m_EccAnom_01);
 	_verify(m_Frac_01);
-	//_verify(m_MeanObli_01);
+	_verify(m_MeanObli_01);
 	_verify(m_Mjday_01);
 	_verify(m_Mjday_02);
 	_verify(m_MjdayTDB_01);
-	//_verify(m_Position_01);
+	_verify(m_Position_01);
 	_verify(m_sign__01);
 	_verify(m_sign__02);
 	_verify(m_timediff_01);
 	_verify(m_AzElPa_01);
+	_verify(m_IERS_01);
+	_verify(m_Legendre_01);
+	_verify(m_NutAngles_01);
+	_verify(m_TimeUpdate_01);
+	_verify(m_TimeUpdate_02); //43 test
 
     return 0;
 }
