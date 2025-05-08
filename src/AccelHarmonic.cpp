@@ -1,4 +1,4 @@
-/*#include "..\include\AccelHarmonic.hpp"
+#include "..\include\AccelHarmonic.hpp"
 
 
 Matrix AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
@@ -43,8 +43,8 @@ Matrix AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
 
     Matrix aux(3);
     aux(1) = ax; aux(2) = ay; aux(3) = az;
-    Matrix a_bf = aux.transpose();
+    Matrix a_bf = transpose(aux);
 
-    Matrix a = (E.transpose()) * a_bf;
+    Matrix a = transpose(E) * a_bf;
     return a;
-}*/
+}

@@ -17,6 +17,8 @@
 #include "..\include\Legendre.hpp"
 #include "..\include\NutAngles.hpp"
 #include "..\include\TimeUpdate.hpp"
+#include "..\include\AccelHarmonic.hpp"
+#include "..\include\EqnEquinox.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -694,30 +696,49 @@ int m_AzElPa_01(){
     return 0;
 }
 
-int m_IERS_01(){//HACER IERS
+int m_IERS_01(){
 
-    Matrix s(3);
-	
-	s(1) = 1; s(2) = 2; s(3) = 3;
+    Matrix eop(13,2);
 
-    auto [Az, El, dAds, dEds] = AzElPa(s);
+    eop(1,1) = 1; eop(1,2) = 1;
+    eop(2,1) = 2; eop(2,2) = 2;
+    eop(3,1) = 3; eop(3,2) = 3;
+    eop(4,1) = 4; eop(4,2) = 4;
+    eop(5,1) = 5; eop(5,2) = 5;
+    eop(6,1) = 6; eop(6,2) = 6;
+    eop(7,1) = 7; eop(7,2) = 7;
+    eop(8,1) = 8; eop(8,2) = 8;
+    eop(9,1) = 9; eop(9,2) = 9;
+    eop(10,1) = -1; eop(10,2) = -1;
+    eop(11,1) = -2; eop(11,2) = -2;
+    eop(12,1) = -3; eop(12,2) = -3;
+    eop(13,1) = -4; eop(13,2) = -4;
+    
+    double Mjd_UTC = 5.5;
+    char interp = 'l';
 
-    double ans_Az = 0.463647609000806;
-    double ans_El = 0.930274014115472;
+    auto [x_pole, y_pole, UT1_UTC, LOD, dpsi, deps, dx_pole, dy_pole, TAI_UTC] = IERS(eop, Mjd_UTC, interp);
 
-    Matrix ans_dAds(3);
+    double ans_x_pole = ;
+    double ans_y_pole = ;
+    double ans_UT1_UTC = ;
+    double ans_LOD = ;
+    double ans_dpsi = ;
+    double ans_deps = ;
+    double ans_dx_pole = ;
+    double ans_dy_pole = ;
+    double ans_TAI_UTC = ;
 
-	ans_dAds(1) = 0.4; ans_dAds(2) = -0.2; ans_dAds(3) = 0.0;
-	
-    Matrix ans_dEds(3);
+    _assert(fabs(x_pole - ans_x_pole)< 1e-10);
+    _assert(fabs(y_pole - ans_y_pole)< 1e-10);
+    _assert(fabs(UT1_UTC - ans_UT1_UTC)< 1e-10);
+    _assert(fabs(LOD - ans_LOD)< 1e-10);
+    _assert(fabs(dpsi - ans_dpsi)< 1e-10);
+    _assert(fabs(deps - ans_deps)< 1e-10);
+    _assert(fabs(dx_pole - ans_dx_pole)< 1e-10);
+    _assert(fabs(dy_pole - ans_dy_pole)< 1e-10);
+    _assert(fabs(TAI_UTC - ans_TAI_UTC)< 1e-10);
 
-	ans_dEds(1) = -0.095831484749991; ans_dEds(2) = -0.191662969499982; ans_dEds(3) = 0.159719141249985;
-
-    _assert(fabs(Az - ans_Az)< 1e-10);
-    _assert(fabs(El - ans_El)< 1e-10);
-    _assert(m_equals(dAds, ans_dAds, 1e-10));
-    _assert(m_equals(dEds, ans_dEds, 1e-10));
-	
     return 0;
 }
 
@@ -757,25 +778,82 @@ int m_NutAngles_01(){
     return 0;
 }
 
-int m_TimeUpdate_01() {//hacer timesupdate
+int m_TimeUpdate_01() {
 
-	double ans = 2;
+	Matrix P(2,2);
+    P(1,1) = 1; P(1,2) = 2;
+    P(2,1) = 3; P(2,2) = 4;
 
-	double R = sign_(2, 2);
+    Matrix Phi(2,2);
+    Phi(1,1) = 5; Phi(1,2) = 6;
+    Phi(2,1) = 7; Phi(2,2) = 8;
+
+    double Qdt = 5.5;
     
-    _assert(fabs(R - ans) < 1e-9);
+    Matrix R = TimeUpdate(P, Phi, Qdt);
+
+	Matrix ans(2,2);
+    ans(1,1) = 324.5; ans(1,2) = 438.5;
+    ans(2,1) = 436.5; ans(2,2) = 590.5;
+    
+    _assert(m_equals(R, ans, 1e-10));
     
     return 0;
 }
 
-int m_TimeUpdate_02() {//hacer timesupdate
+int m_TimeUpdate_02() {
 
-	double ans = -2;
+	Matrix P(2,2);
+    P(1,1) = 1; P(1,2) = 2;
+    P(2,1) = 3; P(2,2) = 4;
 
-	double R = sign_(2, -2);
+    Matrix Phi(2,2);
+    Phi(1,1) = 5; Phi(1,2) = 6;
+    Phi(2,1) = 7; Phi(2,2) = 8;
     
-    _assert(fabs(R - ans) < 1e-9);
+    Matrix R = TimeUpdate(P, Phi);
+
+	Matrix ans(2,2);
+    ans(1,1) = 319; ans(1,2) = 433;
+    ans(2,1) = 431; ans(2,2) = 585;
     
+    _assert(m_equals(R, ans, 1e-10));
+    
+    return 0;
+}
+
+int m_AccelHarmonic_01() {
+
+	Matrix r(3,3);
+    r(1,1) = 1; r(1,2) = 2; r(1,3) = 3;
+    r(2,1) = 4; r(2,2) = 5; r(2,3) = 6;
+	r(3,1) = 7; r(3,2) = 8; r(3,3) = 9;
+
+    Matrix E(3,3);
+    E(1,1) = 3; E(1,2) = 2; E(1,3) = 1;
+    E(2,1) = 5; E(2,2) = 5; E(2,3) = 5;
+	E(3,1) = 8; E(3,2) = 7; E(3,3) = 9;
+    
+    Matrix R = AccelHarmonic(r, E, 3, 5);
+
+	Matrix ans(3);
+    ans(1) = 1.0640220936491e+19;
+    ans(2) = 8.78770190976563e+18;
+	ans(3) = 9.64204461159677e+18;
+    
+    _assert(m_equals(R, ans, 1e-10));
+    
+    return 0;
+}
+
+int m_EqnEquinox_01(){
+
+    double R = EqnEquinox(2);
+
+    double ans = 2.49335221515174e-05;
+
+    _assert(fabs(R - ans)< 1e-10);
+	
     return 0;
 }
 
@@ -825,6 +903,9 @@ int all_tests()
 	_verify(m_NutAngles_01);
 	_verify(m_TimeUpdate_01);
 	_verify(m_TimeUpdate_02); //43 test
+
+	_verify(m_AccelHarmonic_01);
+	_verify(m_EqnEquinox_01);
 
     return 0;
 }
