@@ -1,12 +1,12 @@
 #include "..\include\AccelHarmonic.hpp"
 
 
-Matrix AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
+Matrix& AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
 
     double r_ref = 6378.1363e3;  
     double gm    = 398600.4415e9; 
-
-    Matrix r_bf = E * r;
+	
+    Matrix& r_bf = E * r;
 
     double d = norm(r_bf);                     
     double latgc = asin(r_bf(3)/d);
@@ -41,10 +41,10 @@ Matrix AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
     double ay = (1/d*dUdr-r_bf(3)/(pow(d,2)*sqrt(r2xy))*dUdlatgc)*r_bf(2)+(1/r2xy*dUdlon)*r_bf(1);
     double az =  1/d*dUdr*r_bf(3)+sqrt(r2xy)/pow(d,2)*dUdlatgc;
 
-    Matrix aux(3);
+    Matrix& aux = zeros(3);
     aux(1) = ax; aux(2) = ay; aux(3) = az;
-    Matrix a_bf = transpose(aux);
+    Matrix& a_bf = transponse(aux);
 
-    Matrix a = transpose(E) * a_bf;
+    Matrix& a = transponse(E) * a_bf;
     return a;
 }

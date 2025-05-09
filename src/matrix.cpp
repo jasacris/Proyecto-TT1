@@ -163,7 +163,7 @@ Matrix& zeros(const int n_row, const int n_column) {
 }
 
 Matrix& Matrix::operator * (Matrix &m){
-	if (this->n_column != m.n_row) {
+	if (this->n_row != m.n_column) {
 		cout << "Matrix prod1: error in n_row/n_column\n";
         exit(EXIT_FAILURE);
 	}

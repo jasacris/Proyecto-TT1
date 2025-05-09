@@ -23,8 +23,8 @@ tuple<double,double,double,double,double,double,double,double,double> IERS(Matri
             }
         }
 
-        Matrix preeop = eop.extract_column(i);
-        Matrix nexteop = eop.extract_column(i+1);
+        Matrix& preeop = eop.extract_column(i);
+        Matrix& nexteop = eop.extract_column(i+1);
 
         double mfme = 1440*(Mjd_UTC-floor(Mjd_UTC));
         double fixf = mfme/1440;

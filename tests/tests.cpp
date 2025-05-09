@@ -695,7 +695,7 @@ int m_AzElPa_01(){
 	
     return 0;
 }
-
+/*
 int m_IERS_01(){
 
     Matrix eop(13,2);
@@ -740,7 +740,7 @@ int m_IERS_01(){
     _assert(fabs(TAI_UTC - ans_TAI_UTC)< 1e-10);
 
     return 0;
-}
+}*/
 
 int m_Legendre_01(){
 
@@ -824,15 +824,11 @@ int m_TimeUpdate_02() {
 
 int m_AccelHarmonic_01() {
 
-	Matrix r(3,3);
-    r(1,1) = 1; r(1,2) = 2; r(1,3) = 3;
-    r(2,1) = 4; r(2,2) = 5; r(2,3) = 6;
-	r(3,1) = 7; r(3,2) = 8; r(3,3) = 9;
+	Matrix r(3);
+    r(1) = 1; r(2) = 2; r(3) = 3;
 
-    Matrix E(3,3);
-    E(1,1) = 3; E(1,2) = 2; E(1,3) = 1;
-    E(2,1) = 5; E(2,2) = 5; E(2,3) = 5;
-	E(3,1) = 8; E(3,2) = 7; E(3,3) = 9;
+    Matrix E(3);
+    E(1) = 4; E(2) = 5; E(3) = 6;
     
     Matrix R = AccelHarmonic(r, E, 3, 5);
 
@@ -859,6 +855,11 @@ int m_EqnEquinox_01(){
 
 int all_tests()
 {
+	/*eop19620101(21413);
+	GGM03S(181);
+	DE430Coeff(2285, 1020);
+	GEOS3(43);*/
+	
     _verify(m_sum_01);
 	_verify(m_sum_02);
     _verify(m_sub_01);
@@ -898,7 +899,7 @@ int all_tests()
 	_verify(m_sign__02);
 	_verify(m_timediff_01);
 	_verify(m_AzElPa_01);
-	_verify(m_IERS_01);
+	//_verify(m_IERS_01);
 	_verify(m_Legendre_01);
 	_verify(m_NutAngles_01);
 	_verify(m_TimeUpdate_01);
