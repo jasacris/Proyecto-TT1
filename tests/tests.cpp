@@ -19,6 +19,16 @@
 #include "..\include\TimeUpdate.hpp"
 #include "..\include\AccelHarmonic.hpp"
 #include "..\include\EqnEquinox.hpp"
+#include "..\include\JPL_Eph_DE430.hpp"
+#include "..\include\LTC.hpp"
+#include "..\include\NutMatrix.hpp"
+#include "..\include\PoleMatrix.hpp"
+#include "..\include\PrecMatrix.hpp"
+#include "..\include\gmst.hpp"
+#include "..\include\gast.hpp"
+#include "..\include\MeasUpdate.hpp"
+#include "..\include\G_AccelHarmonic.hpp"
+#include "..\include\GHAMatrix.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -824,18 +834,22 @@ int m_TimeUpdate_02() {
 
 int m_AccelHarmonic_01() {
 
-	Matrix r(3);
-    r(1) = 1; r(2) = 2; r(3) = 3;
+	Matrix r(3,3);
+    r(1,1) = 1; r(1,2) = 2; r(1,3) = 0;
+    r(2,1) = 0; r(2,2) = 3; r(2,3) = 4;
+    r(3,1) = 5; r(3,2) = 2; r(3,3) = 3;
 
-    Matrix E(3);
-    E(1) = 4; E(2) = 5; E(3) = 6;
+    Matrix E(3,3);
+    E(1,1) = 4; E(1,2) = 0; E(1,3) = 5;
+    E(2,1) = 6; E(2,2) = 7; E(2,3) = 0;
+    E(3,1) = 5; E(3,2) = 1; E(3,3) = 0;
     
     Matrix R = AccelHarmonic(r, E, 3, 5);
 
 	Matrix ans(3);
-    ans(1) = 1.0640220936491e+19;
-    ans(2) = 8.78770190976563e+18;
-	ans(3) = 9.64204461159677e+18;
+    ans(1) = 9.25409555956005e+21;
+    ans(2) = 1.07051465103659e+22;
+	ans(3) =-1.00042803636418e+21;
     
     _assert(m_equals(R, ans, 1e-10));
     
@@ -853,13 +867,175 @@ int m_EqnEquinox_01(){
     return 0;
 }
 
-int all_tests()
-{
-	/*eop19620101(21413);
-	GGM03S(181);
-	DE430Coeff(2285, 1020);
-	GEOS3(43);*/
+/*int m_JPL_Eph_DE430_01(){
+
+    
 	
+    return 0;
+}*/
+
+int m_LTC_01(){
+
+    Matrix R = EqnEquinox(2,4);
+
+    Matrix ans(3,3);    
+	ans(1,1) = -0.909297426825682; ans(1,2) =  -0.416146836547142; ans(1,3) = 0;
+	ans(2,1) = -0.314940964313378; ans(2,2) = 0.688158561598754; ans(2,3) = -0.653643620863612;
+	ans(3,1) = 0.272011725051612; ans(3,2) =  -0.594356462512304; ans(3,3) = -0.756802495307928;
+
+    _assert(m_equals(R, ans, 1e-10));
+	
+    return 0;
+}
+
+int m_NutMatrix_01(){
+
+    Matrix R = NutMatrix(5);
+
+    Matrix ans(3,3);    
+	ans(1,1) = 0.999999999596936; ans(1,2) =  -2.60458970189426e-05; ans(1,3) = -1.13021883531116e-05;
+	ans(2,1) = 2.6045466894546e-05; ans(2,2) = 0.999999998936717; ans(2,3) = -3.80552143565138e-05;
+	ans(3,1) = 1.13031795232884e-05; ans(3,2) =  3.80549199703872e-05; ans(3,3) = 0.999999999212031;
+
+    _assert(m_equals(R, ans, 1e-10));
+	
+    return 0;
+}
+
+int m_PoleMatrix_01(){
+
+    Matrix R = PoleMatrix(3,5);
+
+    Matrix ans(3,3);    
+	ans(1,1) = -0.989992496600445; ans(1,2) =  -0.135323401369264; ans(1,3) = 0.04003040989885;
+	ans(2,1) = 0; ans(2,2) = 0.283662185463226; ans(2,3) = 0.958924274663138;
+	ans(3,1) = -0.141120008059867; ans(3,2) =  0.949327836724532; ans(3,3) = -0.280823435177878;
+
+    _assert(m_equals(R, ans, 1e-10));
+	
+    return 0;
+}
+
+int m_PrecMatrix_01(){
+
+    Matrix R = PrecMatrix(2,4);
+
+    Matrix ans(3,3);    
+	ans(1,1) = 0.99999999999911; ans(1,2) =  -1.22341466610288e-06; ans(1,3) = -5.32402961405738e-07;
+	ans(2,1) = 1.22341466610288e-06; ans(2,2) = 0.999999999999252; ans(2,3) = -3.25674798695904e-13;
+	ans(3,1) = 5.32402961405738e-07; ans(3,2) =  -3.25674792564771e-13; ans(3,3) = 0.999999999999858;
+
+    _assert(m_equals(R, ans, 1e-10));
+	
+    return 0;
+}
+
+int m_gmst_01(){
+
+    double R = gmst(5);
+
+    double ans = 1.05922210457995;
+
+    _assert(fabs(R - ans)< 1e-10);
+	
+    return 0;
+}
+
+int m_gast_01(){
+
+    double R = gast(3);
+
+    double ans = 1.02484149759777;
+
+    _assert(fabs(R - ans)< 1e-10);
+	
+    return 0;
+}
+
+int m_MeasUpdate_01(){
+
+    Matrix x(2,2);
+	
+	x(1,1) = 1; x(1,2) = 2;
+    x(2,1) = 3; x(2,2) = 4; 
+    
+    Matrix G(2,2);
+	
+	G(1,1) = 4; G(1,2) = 5;
+    G(2,1) = 6; G(2,2) = 7; 
+
+    Matrix P(2,2);
+	
+	P(1,1) = 2; P(1,2) = 6;
+    P(2,1) = 4; P(2,2) = 1; 
+
+    auto [K, x, P] = MeasUpdate(x, 3, 4, 2, G, P, 2);
+
+    double ans_Az = 0.463647609000806;
+    double ans_El = 0.930274014115472;
+
+    Matrix ans_K(2,2);
+
+	ans_K(1,1) = 2.03333333333333; ans_K(1,2) = -1.3;
+    ans_K(2,1) = -2.53333333333332; ans_K(2,2) = 1.8; 
+	
+    Matrix ans_x(2,2);
+
+	ans_x(1,1) = -1.03333333333333; ans_x(1,2) = 3.3;
+    ans_x(2,1) = 5.53333333333332; ans_x(2,2) = 2.2; 
+
+    Matrix ans_P(2,2);
+
+	ans_P(1,1) = -2.93333333333339; ans_P(1,2) = 2.93333333333327;
+    ans_P(2,1) = 2.933333333333; ans_P(2,2) = -2.93333333333368; 
+
+    _assert(m_equals(K, ans_K, 1e-10));
+    _assert(m_equals(x, ans_x, 1e-10));
+    _assert(m_equals(P, ans_P, 1e-10));
+	
+    return 0;
+}
+
+int m_GAccelHarmonic_01() {
+
+	Matrix r(3,3);
+    r(1,1) = 1; r(1,2) = 2; r(1,3) = 0;
+    r(2,1) = 0; r(2,2) = 3; r(2,3) = 4;
+    r(3,1) = 5; r(3,2) = 2; r(3,3) = 3;
+
+    Matrix E(3,3);
+    E(1,1) = 4; E(1,2) = 0; E(1,3) = 5;
+    E(2,1) = 6; E(2,2) = 7; E(2,3) = 0;
+    E(3,1) = 5; E(3,2) = 1; E(3,3) = 0;
+    
+    Matrix R = G_AccelHarmonic(r, E, 3, 5);
+
+	Matrix ans(3,3);
+    ans(1,1) = -2.81279557874801e+22; ans(1,2) = -2.4187982983898e+22; ans(1,3) = -2.20186794213783e+21;
+    ans(2,1) = -2.96437608885359e+22; ans(2,2) = -2.35964821674522e+22; ans(2,3) = -3.07198314514787e+21;
+    ans(3,1) = -1.77997171661512e+21; ans(3,2) = -1.92922470985208e+21; ans(3,3) = 8.49408756740977e+20;
+    
+    _assert(m_equals(R, ans, 1e-10));
+    
+    return 0;
+}
+
+int m_GHAMatrix_01() {
+    
+    Matrix R = GHAMatrix(3);
+
+	Matrix ans(3,3);
+    ans(1,1) = 0.519234354564389; ans(1,2) = 0.854631900317384; ans(1,3) = 0;
+    ans(2,1) = -0.854631900317384; ans(2,2) = 0.519234354564389; ans(2,3) = 0;
+    ans(3,1) = 0; ans(3,2) = 0; ans(3,3) = 1;
+    
+    _assert(m_equals(R, ans, 1e-10));
+    
+    return 0;
+}
+
+int all_tests()
+{	
     _verify(m_sum_01);
 	_verify(m_sum_02);
     _verify(m_sub_01);
@@ -907,6 +1083,17 @@ int all_tests()
 
 	_verify(m_AccelHarmonic_01);
 	_verify(m_EqnEquinox_01);
+	//_verify(m_JPL_Eph_DE430_01);
+	_verify(m_LTC_01);
+	_verify(m_NutMatrix_01);
+	_verify(m_PoleMatrix_01);
+	_verify(m_PrecMatrix_01);
+	_verify(m_gmst_01); //51 test
+    
+	_verify(m_gast_01);
+	_verify(m_MeasUpdate_01);
+	_verify(m_GAccelHarmonic_01);
+	_verify(m_GHAMatrix_01);
 
     return 0;
 }
@@ -914,6 +1101,11 @@ int all_tests()
 
 int main()
 {
+    eop19620101(21413);
+    GGM03S(181);
+    DE430Coeff(2285, 1020);
+    GEOS3(43);
+
     int result = all_tests();
 
     if (result == 0)

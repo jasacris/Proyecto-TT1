@@ -46,5 +46,5 @@ Matrix& AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
     Matrix& a_bf = transponse(aux);
 
     Matrix& a = transponse(E) * a_bf;
-    return a;
+    return transponse(a);
 }
