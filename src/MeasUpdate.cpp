@@ -5,7 +5,7 @@ tuple<Matrix&, Matrix&, Matrix&> MeasUpdate(Matrix& x, double z, double g, doubl
     int m = 1;
     double Inv_W = s*s; 
 
-    Matrix& K = P * transpose(G) * inv(G * P * transpose(G) + Inv_W);
+    Matrix& K = P * transponse(G) * inv(G * P * transponse(G) + Inv_W);
 
     x = x + (K * (z - g));
 

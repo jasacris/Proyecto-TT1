@@ -1,4 +1,3 @@
-
 #include "..\include\PoleMatrix.hpp"
 
 Matrix& PoleMatrix(double xp, double yp){

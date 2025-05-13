@@ -1,4 +1,4 @@
-#include "..\include\G_AccelHarmonic.hpp"
+/*#include "..\include\G_AccelHarmonic.hpp"
 
 Matrix& G_AccelHarmonic(Matrix& r, Matrix& U, int n_max, int m_max){
     double d = 1.0; 
@@ -13,8 +13,8 @@ Matrix& G_AccelHarmonic(Matrix& r, Matrix& U, int n_max, int m_max){
 
         Matrix& da = AccelHarmonic (r + dr / 2, U, n_max, m_max) - AccelHarmonic (r - dr / 2, U, n_max, m_max);
         
-        G.assign_column(i, da / d);      
+        G.assign_column(da / d, i);      
     }
 
     return G;
-}
+}*/
