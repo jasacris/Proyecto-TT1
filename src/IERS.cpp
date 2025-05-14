@@ -1,6 +1,6 @@
 #include "..\include\IERS.hpp"
 
-tuple<double,double,double,double,double,double,double,double,double> IERS(Matrix &eop, double Mjd_UTC, char interp){
+tuple<double,double,double,double,double,double,double,double,double> IERS(double Mjd_UTC, char interp){
 
     double x_pole;
     double y_pole;
@@ -11,6 +11,8 @@ tuple<double,double,double,double,double,double,double,double,double> IERS(Matri
     double dx_pole;
     double dy_pole;
     double TAI_UTC;
+	
+	Matrix& eop = eopdata;
 
     if (interp =='l'){
         double mjd = (floor(Mjd_UTC));
@@ -22,7 +24,7 @@ tuple<double,double,double,double,double,double,double,double,double> IERS(Matri
                 break;
             }
         }
-
+		
         Matrix& preeop = eop.extract_column(i);
         Matrix& nexteop = eop.extract_column(i+1);
 

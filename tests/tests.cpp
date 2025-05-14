@@ -1,4 +1,5 @@
 #include "..\include\matrix.hpp"
+#include "..\include\global.hpp"
 #include "..\include\R_x.hpp"
 #include "..\include\R_y.hpp"
 #include "..\include\R_z.hpp"
@@ -705,39 +706,23 @@ int m_AzElPa_01(){
 	
     return 0;
 }
-/*
+
 int m_IERS_01(){
-
-    Matrix eop(13,2);
-
-    eop(1,1) = 1; eop(1,2) = 1;
-    eop(2,1) = 2; eop(2,2) = 2;
-    eop(3,1) = 3; eop(3,2) = 3;
-    eop(4,1) = 4; eop(4,2) = 4;
-    eop(5,1) = 5; eop(5,2) = 5;
-    eop(6,1) = 6; eop(6,2) = 6;
-    eop(7,1) = 7; eop(7,2) = 7;
-    eop(8,1) = 8; eop(8,2) = 8;
-    eop(9,1) = 9; eop(9,2) = 9;
-    eop(10,1) = -1; eop(10,2) = -1;
-    eop(11,1) = -2; eop(11,2) = -2;
-    eop(12,1) = -3; eop(12,2) = -3;
-    eop(13,1) = -4; eop(13,2) = -4;
     
-    double Mjd_UTC = 5.5;
+    double Mjd_UTC = 49746.1163541665;
     char interp = 'l';
 
-    auto [x_pole, y_pole, UT1_UTC, LOD, dpsi, deps, dx_pole, dy_pole, TAI_UTC] = IERS(eop, Mjd_UTC, interp);
+    auto [x_pole, y_pole, UT1_UTC, LOD, dpsi, deps, dx_pole, dy_pole, TAI_UTC] = IERS(Mjd_UTC, interp);
 
-    double ans_x_pole = ;
-    double ans_y_pole = ;
-    double ans_UT1_UTC = ;
-    double ans_LOD = ;
-    double ans_dpsi = ;
-    double ans_deps = ;
-    double ans_dx_pole = ;
-    double ans_dy_pole = ;
-    double ans_TAI_UTC = ;
+    double ans_x_pole = -5.5937872420407e-07;
+    double ans_y_pole = 2.33559834147197e-06;
+    double ans_UT1_UTC = 0.325747632958709;
+    double ans_LOD = 0.00272698971874332;
+    double ans_dpsi = -1.16882953161744e-07;
+    double ans_deps = -2.4783506198648e-08;
+    double ans_dx_pole = -8.43027359626024e-10;
+    double ans_dy_pole = -1.56811369105037e-09;
+    double ans_TAI_UTC = 29;
 
     _assert(fabs(x_pole - ans_x_pole)< 1e-10);
     _assert(fabs(y_pole - ans_y_pole)< 1e-10);
@@ -750,7 +735,7 @@ int m_IERS_01(){
     _assert(fabs(TAI_UTC - ans_TAI_UTC)< 1e-10);
 
     return 0;
-}*/
+}
 
 int m_Legendre_01(){
 
@@ -1016,8 +1001,8 @@ int m_GAccelHarmonic_01() {
     _assert(m_equals(R, ans, 1e-10));
     
     return 0;
-}
-*/
+}*/
+
 int m_GHAMatrix_01() {
     
     Matrix R = GHAMatrix(3);
@@ -1073,7 +1058,7 @@ int all_tests()
 	_verify(m_sign__02);
 	_verify(m_timediff_01);
 	_verify(m_AzElPa_01);
-	//_verify(m_IERS_01);
+	_verify(m_IERS_01);
 	_verify(m_Legendre_01);
 	_verify(m_NutAngles_01);
 	_verify(m_TimeUpdate_01);
@@ -1099,10 +1084,10 @@ int all_tests()
 
 int main()
 {
-    /*eop19620101(21413);
+    eop19620101(21413);
     GGM03S(181);
     DE430Coeff(2285, 1020);
-    //GEOS3(43);*/
+    //GEOS3(43);
 
     int result = all_tests();
 

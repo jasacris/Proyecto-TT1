@@ -5,14 +5,14 @@ Matrix& AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
 
     double r_ref = 6378.1363e3;  
     double gm    = 398600.4415e9; 
-	
-    Matrix& r_bf = E * r;
+	cout<<E<<endl;cout<<r<<endl;
+    Matrix& r_bf = E * r;cout<<"llega"<<endl;
 
     double d = norm(r_bf);                     
     double latgc = asin(r_bf(3)/d);
     double lon = atan2(r_bf(2),r_bf(1));
 
-    auto [pnm, dpnm] = Legendre(n_max,m_max,latgc);
+    auto [pnm, dpnm] = Legendre(n_max, m_max, latgc);
 
     double dUdr = 0.0;
     double dUdlatgc = 0.0;

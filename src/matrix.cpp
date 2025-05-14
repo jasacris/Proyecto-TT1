@@ -228,21 +228,27 @@ Matrix& Matrix::operator / (const double n){
 	return *m_aux;
 }
 
-Matrix& Matrix::operator = (Matrix &m){
-	if (this->n_row != m.n_row || this->n_column != m.n_column) {
-		cout << "Matrix equ: error in n_row/n_column\n";
+Matrix& Matrix::operator = (Matrix &m){	
+	this->n_row = m.n_row;
+	this->n_column = m.n_column;
+	this->data = (double **) malloc(m.n_row*sizeof(double *));
+	
+    if (this->data == NULL) {
+		cout << "Matrix create: error in data\n";
         exit(EXIT_FAILURE);
 	}
 	
-	Matrix *m_aux = new Matrix(this->n_row, this->n_column);
+	for(int i = 0; i < n_row; i++) {
+		this->data[i] = (double *) malloc(m.n_column*sizeof(double));
+	}
 	
-    for(int i = 1; i <= this->n_row; i++) {
-        for(int j = 1; j <= this->n_column; j++) {
-			(*m_aux)(i,j) = ((*this)(i,j) = m(i,j));
+	for(int i = 1; i <= m.n_row; i++){
+		for(int j = 1; j <= m.n_column; j++){
+			(*this)(i,j) = m(i,j);
 		}
 	}
 	
-	return *m_aux;
+	return (*this);
 }
 
 Matrix& inv (Matrix &m){	
