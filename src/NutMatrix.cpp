@@ -6,7 +6,8 @@ Matrix& NutMatrix(double Mjd_TT){
 
     auto [dpsi, deps] = NutAngles (Mjd_TT);
 
-    Matrix& NutMat = R_x(-eps - deps) * R_z(-dpsi) * R_x(+eps);
+    Matrix& NutMat = zeros(3,3);
+	NutMat=	R_x(-eps - deps) * R_z(-dpsi) * R_x(+eps);
 
     return NutMat;
 }

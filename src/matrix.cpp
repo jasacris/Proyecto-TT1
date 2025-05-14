@@ -172,7 +172,7 @@ Matrix& Matrix::operator * (Matrix &m){
 	
     for(int i = 1; i <= this->n_row; i++) {
         for(int j = 1; j <= m.n_column; j++) {
-			int suma = 0;
+			double suma = 0;
 			for(int k = 1; k <= this->n_column; k++){
 				suma += (*this)(i, k)*m(k, j);
 			}

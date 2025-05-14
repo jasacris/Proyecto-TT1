@@ -834,10 +834,8 @@ int m_TimeUpdate_02() {
 
 int m_AccelHarmonic_01() {
 
-	Matrix r(3,3);
-    r(1,1) = 1; r(1,2) = 2; r(1,3) = 0;
-    r(2,1) = 0; r(2,2) = 3; r(2,3) = 4;
-    r(3,1) = 5; r(3,2) = 2; r(3,3) = 3;
+	Matrix r(3);
+    r(1) = 1; r(2) = 2; r(3) = 0;
 
     Matrix E(3,3);
     E(1,1) = 4; E(1,2) = 0; E(1,3) = 5;
@@ -896,7 +894,7 @@ int m_NutMatrix_01(){
 	ans(1,1) = 0.999999999596936; ans(1,2) =  -2.60458970189426e-05; ans(1,3) = -1.13021883531116e-05;
 	ans(2,1) = 2.6045466894546e-05; ans(2,2) = 0.999999998936717; ans(2,3) = -3.80552143565138e-05;
 	ans(3,1) = 1.13031795232884e-05; ans(3,2) =  3.80549199703872e-05; ans(3,3) = 0.999999999212031;
-
+	
     _assert(m_equals(R, ans, 1e-10));
 	
     return 0;
@@ -1081,17 +1079,17 @@ int all_tests()
 	_verify(m_TimeUpdate_01);
 	_verify(m_TimeUpdate_02); //43 test
 
-	//_verify(m_AccelHarmonic_01);
+	_verify(m_AccelHarmonic_01);
 	_verify(m_EqnEquinox_01);
 	//_verify(m_JPL_Eph_DE430_01);
-	//_verify(m_LTC_01);
-	//_verify(m_NutMatrix_01);
-	//_verify(m_PoleMatrix_01);
-	//_verify(m_PrecMatrix_01);
+	_verify(m_LTC_01);
+	_verify(m_NutMatrix_01);
+	_verify(m_PoleMatrix_01);
+	_verify(m_PrecMatrix_01);
 	_verify(m_gmst_01); //51 test
     
 	_verify(m_gast_01);
-	//_verify(m_MeasUpdate_01);
+	_verify(m_MeasUpdate_01);
 	//_verify(m_GAccelHarmonic_01);
 	_verify(m_GHAMatrix_01);
 

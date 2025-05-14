@@ -7,6 +7,8 @@
 #include "..\include\R_x.hpp"
 #include "..\include\R_z.hpp"
 
+using namespace std;
+
 Matrix& NutMatrix(double Mjd_TT);
 
 #endif
