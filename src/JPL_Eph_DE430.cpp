@@ -4,7 +4,7 @@ tuple<Matrix&, Matrix&, Matrix&, Matrix&, Matrix&, Matrix&, Matrix&, Matrix&, Ma
     double JD = Mjd_TDB + 2400000.5;
     double i;
 
-    for(int aux = 1; aux <= PC.n_row; i++){
+    for(int aux = 1; aux <= PC.n_row; aux++){
         if(PC(aux,1) <= JD && JD <= PC(aux,2)){
             i = aux;
             break;

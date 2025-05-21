@@ -21,4 +21,6 @@ void GGM03S(int n);
 
 void DE430Coeff(int f, int c);
 
+void initAuxParam();
+
 #endif

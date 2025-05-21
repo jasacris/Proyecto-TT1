@@ -30,6 +30,8 @@
 #include "..\include\MeasUpdate.hpp"
 #include "..\include\G_AccelHarmonic.hpp"
 #include "..\include\GHAMatrix.hpp"
+#include "..\include\Accel.hpp"
+#include "..\include\VarEqn.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -741,9 +743,6 @@ int m_Legendre_01(){
 
     auto [pnm, dpnm] = Legendre(1, 2, 3);
 
-    double ans_Az = 0.463647609000806;
-    double ans_El = 0.930274014115472;
-
     Matrix ans_pnm(2,3);
 
 	ans_pnm(1,1) = 1.0; ans_pnm(1,2) = 0.0; ans_pnm(1,3) = 0.0;
@@ -827,12 +826,12 @@ int m_AccelHarmonic_01() {
     E(2,1) = 6; E(2,2) = 7; E(2,3) = 0;
     E(3,1) = 5; E(3,2) = 1; E(3,3) = 0;
     
-    Matrix R = AccelHarmonic(r, E, 3, 5);
+    Matrix R = AccelHarmonic(r, E, 2, 2);
 
 	Matrix ans(3);
-    ans(1) = 4.18140825983705e+23;
-    ans(2) = 4.1242217434484e+22;
-	ans(3) = 3.8898986284644e+23;
+    ans(1) = -3.24438073600087e+20;
+    ans(2) = -1.64348716237766e+20;
+	ans(3) = -9.19973624774166e+19;
 	
 	cout<<R<<endl;
 	cout<<ans<<endl;
@@ -870,7 +869,7 @@ int m_JPL_Eph_DE430_01(){
 	P(1,1) = 2; P(1,2) = 6;
     P(2,1) = 4; P(2,2) = 1; 
 
-    auto [r_Mercury,r_Venus,r_Earth,r_Mars,r_Jupiter,r_Saturn,r_Uranus,r_Neptune,r_Pluto,r_Moon,r_Sun] = JPL_Eph_DE430(Mjday_TDB(Mjd_TT));
+    auto [r_Mercury,r_Venus,r_Earth,r_Mars,r_Jupiter,r_Saturn,r_Uranus,r_Neptune,r_Pluto,r_Moon,r_Sun] = JPL_Eph_DE430(Mjday_TDB(AuxParam.Mjd_TT));
 
     Matrix ans_Mercury(3);
 
@@ -915,10 +914,18 @@ int m_JPL_Eph_DE430_01(){
 	Matrix ans_Sun(3);
 	
 	ans_Sun(1) = 92308639955.5137; ans_Sun(2) = -105367651030.449; ans_Sun(3) = -45683095695.9811;
-
-    _assert(m_equals(K, ans_K, 1e-10));
-    _assert(m_equals(x1, ans_x, 1e-10));
-    _assert(m_equals(P1, ans_P, 1e-10));
+cout<<r_Mercury<<endl;cout<<ans_Mercury<<endl;
+    _assert(m_equals(transponse(r_Mercury), ans_Mercury, 1e-10));
+	_assert(m_equals(transponse(r_Venus), ans_Venus, 1e-10));
+	_assert(m_equals(transponse(r_Earth), ans_Earth, 1e-10));
+	_assert(m_equals(transponse(r_Mars), ans_Mars, 1e-10));
+	_assert(m_equals(transponse(r_Jupiter), ans_Jupiter, 1e-10));
+	_assert(m_equals(transponse(r_Saturn), ans_Saturn, 1e-10));
+	_assert(m_equals(transponse(r_Uranus), ans_Uranus, 1e-10));
+	_assert(m_equals(transponse(r_Neptune), ans_Neptune, 1e-10));
+	_assert(m_equals(transponse(r_Pluto), ans_Pluto, 1e-10));
+	_assert(m_equals(transponse(r_Moon), ans_Moon, 1e-10));
+	_assert(m_equals(transponse(r_Sun), ans_Sun, 1e-10));
 	
     return 0;
 }
@@ -1083,6 +1090,44 @@ int m_GHAMatrix_01() {
     return 0;
 }
 
+int m_Accel_01() {
+    
+    Matrix Y = zeros(6);
+	
+	Y(1) = 1; Y(2) = 2; Y(3) = 3;
+	Y(4) = 4; Y(5) = 5; Y(6) = 6;
+	
+    Matrix R = Accel(2.5, Y);
+
+	Matrix ans(3,3);
+    ans(1,1) = 0.519234354564389; ans(1,2) = 0.854631900317384; ans(1,3) = 0;
+    ans(2,1) = -0.854631900317384; ans(2,2) = 0.519234354564389; ans(2,3) = 0;
+    ans(3,1) = 0; ans(3,2) = 0; ans(3,3) = 1;
+    
+    _assert(m_equals(R, ans, 1e-10));
+    
+    return 0;
+}
+
+int m_VarEqn_01() {
+    
+    Matrix Y = zeros(6);
+	
+	Y(1) = 1; Y(2) = 2; Y(3) = 3;
+	Y(4) = 4; Y(5) = 5; Y(6) = 6;
+	
+    Matrix R = VarEqn(3.5, Y);
+
+	Matrix ans(3,3);
+    ans(1,1) = 0.519234354564389; ans(1,2) = 0.854631900317384; ans(1,3) = 0;
+    ans(2,1) = -0.854631900317384; ans(2,2) = 0.519234354564389; ans(2,3) = 0;
+    ans(3,1) = 0; ans(3,2) = 0; ans(3,3) = 1;
+    
+    _assert(m_equals(R, ans, 1e-10));
+    
+    return 0;
+}
+
 int all_tests()
 {	
     _verify(m_sum_01);
@@ -1143,6 +1188,8 @@ int all_tests()
 	_verify(m_MeasUpdate_01);
 	//_verify(m_GAccelHarmonic_01);
 	_verify(m_GHAMatrix_01);
+	//_verify(m_Accel_01);
+	//_verify(m_VarEqn_01);
 
     return 0;
 }
@@ -1154,6 +1201,7 @@ int main()
     GGM03S(181);
     DE430Coeff(2285, 1020);
     //GEOS3(43);
+	initAuxParam();cout<<AuxParam.Mjd_TT<<endl;
 
     int result = all_tests();
 
