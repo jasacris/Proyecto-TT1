@@ -4,10 +4,10 @@ Matrix& VarEqn(double x, Matrix& yPhi){
 
     auto [x_pole, y_pole, UT1_UTC, LOD, dpsi, deps, dx_pole, dy_pole, TAI_UTC] = IERS(AuxParam.Mjd_UTC, 'l');
     auto [UT1_TAI, UTC_GPS, UT1_GPS, TT_UTC, GPS_UTC] = timediff(UT1_UTC, TAI_UTC);
-    double Mjd_UT1 = AuxParam.Mjd_TT + (UT1_UTC - TT_UTC) / 86400;
+    double Mjd_UT1 = AuxParam.Mjd_TT + (UT1_UTC - TT_UTC) / 86400.0;
 
-    Matrix& P = PrecMatrix(MJD_J2000, AuxParam.Mjd_TT + x / 86400);
-    Matrix& N = NutMatrix(AuxParam.Mjd_TT + x / 86400);
+    Matrix& P = PrecMatrix(MJD_J2000, AuxParam.Mjd_TT + x / 86400.0);
+    Matrix& N = NutMatrix(AuxParam.Mjd_TT + x / 86400.0);
     Matrix& T = N * P;
     Matrix& E = PoleMatrix(x_pole, y_pole) * GHAMatrix(Mjd_UT1) * T;
 

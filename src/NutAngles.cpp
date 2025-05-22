@@ -2,10 +2,10 @@
 
 tuple<double,double> NutAngles(double Mjd_TT){
 
-    double T  = (Mjd_TT-MJD_J2000)/36525;
+    double T  = (Mjd_TT-MJD_J2000)/36525.0;
     double T2 = T*T;
     double T3 = T2*T;
-    double rev = 360*3600;
+    double rev = 360.0*3600.0;
 
     int N_coeff = 106;
     const int C[N_coeff][9] = {
@@ -120,16 +120,17 @@ tuple<double,double> NutAngles(double Mjd_TT){
     
     double l  = fmod (485866.733 + (1325.0 * rev +  715922.633) * T + 31.310 * T2 + 0.064 * T3, rev);
     double lp = fmod (1287099.804 + (99.0 * rev + 1292581.224) * T -  0.577 * T2 - 0.012 * T3, rev);
-    double F  = fmod (335778.877 + (1342. * rev +  295263.137) * T- 13.257 * T2 + 0.011 * T3, rev);
+    double F  = fmod (335778.877 + (1342.0 * rev +  295263.137) * T- 13.257 * T2 + 0.011 * T3, rev);
     double D  = fmod (1072261.307 + (1236.0 * rev + 1105601.328) * T -  6.891 * T2 + 0.019 * T3, rev);
     double Om = fmod (450160.280 - (5.0 * rev + 482890.539) * T + 7.455 * T2 + 0.008 * T3, rev);
 
 
-    double dpsi = 0;
-    double deps = 0;
+    double dpsi = 0.0;
+    double deps = 0.0;
+	double arg;
 
     for(int i = 0; i<N_coeff; i++){
-        double arg  =  (C[i][0] * l + C[i][1] * lp + C[i][2] * F + C[i][3] * D + C[i][4] * Om) / Arcs;
+        arg  =  (C[i][0] * l + C[i][1] * lp + C[i][2] * F + C[i][3] * D + C[i][4] * Om) / Arcs;
         dpsi = dpsi + (C[i][5] + C[i][6] * T) * sin(arg);
         deps = deps + (C[i][7] + C[i][8] * T) * cos(arg);
     }

@@ -28,8 +28,8 @@ tuple<double,double,double,double,double,double,double,double,double> IERS(doubl
         Matrix& preeop = eop.extract_column(i);
         Matrix& nexteop = eop.extract_column(i+1);
 
-        double mfme = 1440*(Mjd_UTC-floor(Mjd_UTC));
-        double fixf = mfme/1440;
+        double mfme = 1440.0*(Mjd_UTC-floor(Mjd_UTC));
+        double fixf = mfme/1440.0;
 
         x_pole  = preeop(5)+(nexteop(5)-preeop(5))*fixf;
         y_pole  = preeop(6)+(nexteop(6)-preeop(6))*fixf;

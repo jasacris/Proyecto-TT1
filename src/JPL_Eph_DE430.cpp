@@ -414,5 +414,5 @@ tuple<Matrix&, Matrix&, Matrix&, Matrix&, Matrix&, Matrix&, Matrix&, Matrix&, Ma
     r_Pluto = r_Pluto - r_Earth;
     r_Sun = r_Sun - r_Earth;
 
-    return tie(r_Mercury, r_Venus, r_Earth, r_Mars, r_Jupiter, r_Saturn, r_Uranus, r_Neptune, r_Pluto, r_Moon, r_Sun);
+    return tie(transponse(r_Mercury), transponse(r_Venus), transponse(r_Earth), transponse(r_Mars), transponse(r_Jupiter), transponse(r_Saturn), transponse(r_Uranus), transponse(r_Neptune), transponse(r_Pluto), transponse(r_Moon), transponse(r_Sun));
 }
