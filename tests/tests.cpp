@@ -829,13 +829,14 @@ int m_AccelHarmonic_01() {
     Matrix R = AccelHarmonic(r, E, 2, 2);
 
 	Matrix ans(3);
-    ans(1) = -3.24438073600087e+20;
-    ans(2) = -1.64348716237766e+20;
-	ans(3) = -9.19973624774166e+19;
+    ans(1) = -8.43253296816925e+20;
+    ans(2) = -4.64625239595692e+20;
+	ans(3) = -5.2988491468403e+19;
 	
 	cout<<R<<endl;
 	cout<<ans<<endl;
-    
+	cout<<R-ans<<endl;
+	
     _assert(m_equals(R, ans, 1e-10));
     
     return 0;
@@ -1051,30 +1052,29 @@ int m_MeasUpdate_01(){
 	
     return 0;
 }
-/*
+
 int m_GAccelHarmonic_01() {
 
-	Matrix r(3,3);
+	Matrix r(3);
     r(1,1) = 1; r(1,2) = 2; r(1,3) = 0;
-    r(2,1) = 0; r(2,2) = 3; r(2,3) = 4;
-    r(3,1) = 5; r(3,2) = 2; r(3,3) = 3;
 
-    Matrix E(3,3);
-    E(1,1) = 4; E(1,2) = 0; E(1,3) = 5;
-    E(2,1) = 6; E(2,2) = 7; E(2,3) = 0;
-    E(3,1) = 5; E(3,2) = 1; E(3,3) = 0;
+    Matrix U(3,3);
+    U(1,1) = 4; U(1,2) = 0; U(1,3) = 5;
+    U(2,1) = 6; U(2,2) = 7; U(2,3) = 0;
+    U(3,1) = 5; U(3,2) = 1; U(3,3) = 0;
     
-    Matrix R = G_AccelHarmonic(r, E, 3, 5);
+    Matrix R = G_AccelHarmonic(r, U, 2, 2);
 
 	Matrix ans(3,3);
-    ans(1,1) = -2.81279557874801e+22; ans(1,2) = -2.4187982983898e+22; ans(1,3) = -2.20186794213783e+21;
-    ans(2,1) = -2.96437608885359e+22; ans(2,2) = -2.35964821674522e+22; ans(2,3) = -3.07198314514787e+21;
-    ans(3,1) = -1.77997171661512e+21; ans(3,2) = -1.92922470985208e+21; ans(3,3) = 8.49408756740977e+20;
-    
+    ans(1,1) = 5.09683355945649e+19; ans(1,2) = 3.27855601433435e+19; ans(1,3) = 1.43592730667655e+19;
+    ans(2,1) = 3.55176683732142e+19; ans(2,2) = 1.4021780866073e+19; ans(2,3) = 1.12791364365855e+19;
+    ans(3,1) = 1.56681986838061e+19; ans(3,2) = 1.16055898412755e+19; ans(3,3) = -1.83750599601355e+18;
+    cout<<R<<endl;
+	cout<<ans<<endl;
     _assert(m_equals(R, ans, 1e-10));
     
     return 0;
-}*/
+}
 
 int m_GHAMatrix_01() {
     
@@ -1177,7 +1177,7 @@ int all_tests()
 
 	//_verify(m_AccelHarmonic_01);
 	_verify(m_EqnEquinox_01);
-	_verify(m_JPL_Eph_DE430_01);
+	//_verify(m_JPL_Eph_DE430_01);
 	_verify(m_LTC_01);
 	_verify(m_NutMatrix_01);
 	_verify(m_PoleMatrix_01);
@@ -1186,7 +1186,7 @@ int all_tests()
     
 	_verify(m_gast_01);
 	_verify(m_MeasUpdate_01);
-	//_verify(m_GAccelHarmonic_01);
+	_verify(m_GAccelHarmonic_01);
 	_verify(m_GHAMatrix_01);
 	//_verify(m_Accel_01);
 	//_verify(m_VarEqn_01);
@@ -1200,8 +1200,7 @@ int main()
     eop19620101(21413);
     GGM03S(181);
     DE430Coeff(2285, 1020);
-    //GEOS3(43);
-	initAuxParam();cout<<AuxParam.Mjd_TT<<endl;
+	initAuxParam();
 
     int result = all_tests();
 

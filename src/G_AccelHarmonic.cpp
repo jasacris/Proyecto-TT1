@@ -10,11 +10,11 @@ Matrix& G_AccelHarmonic(Matrix& r, Matrix& U, int n_max, int m_max){
         dr = zeros(3);
 
         dr(i) = d;
-
+		
         Matrix& da = AccelHarmonic (r + dr / 2, U, n_max, m_max) - AccelHarmonic (r - dr / 2, U, n_max, m_max);
-        
+        cout<<AccelHarmonic (r + dr / 2, U, n_max, m_max)<<endl;cout<<AccelHarmonic (r - dr / 2, U, n_max, m_max)<<endl;
         G.assign_column(da / d, i);      
     }
-
+cout<<G<<endl;
     return G;
 }

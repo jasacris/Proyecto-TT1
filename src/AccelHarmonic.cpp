@@ -14,7 +14,7 @@ Matrix& AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
     double latgc = asin(r_bf(3)/d);
     double lon = atan2(r_bf(2),r_bf(1));
 
-    auto [pnm, dpnm] = Legendre(n_max, m_max, latgc);cout<<pnm<<endl; cout<<dpnm<<endl;
+    auto [pnm, dpnm] = Legendre(n_max, m_max, latgc);
 
     double dUdr = 0.0;
     double dUdlatgc = 0.0;
@@ -47,7 +47,9 @@ Matrix& AccelHarmonic(Matrix &r, Matrix &E, int n_max, int m_max){
     double az =  1.0/d*dUdr*r_bf(3)+sqrt(r2xy)/pow(d,2)*dUdlatgc;
 
     Matrix& aux = zeros(3);
+	
     aux(1) = ax; aux(2) = ay; aux(3) = az;
+
     Matrix& a_bf = transponse(aux);
 
     Matrix& a = transponse(E) * a_bf;
