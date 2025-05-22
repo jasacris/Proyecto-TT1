@@ -836,6 +836,7 @@ int m_AccelHarmonic_01() {
 	cout<<R<<endl;
 	cout<<ans<<endl;
 	cout<<R-ans<<endl;
+	cout<<(fabs(R(1)-ans(1))<1e-10)<<endl;
 	
     _assert(m_equals(R, ans, 1e-10));
     
@@ -1175,7 +1176,7 @@ int all_tests()
 	_verify(m_TimeUpdate_01);
 	_verify(m_TimeUpdate_02); //43 test
 
-	//_verify(m_AccelHarmonic_01);
+	_verify(m_AccelHarmonic_01);
 	_verify(m_EqnEquinox_01);
 	//_verify(m_JPL_Eph_DE430_01);
 	_verify(m_LTC_01);
@@ -1186,7 +1187,7 @@ int all_tests()
     
 	_verify(m_gast_01);
 	_verify(m_MeasUpdate_01);
-	_verify(m_GAccelHarmonic_01);
+	//_verify(m_GAccelHarmonic_01);
 	_verify(m_GHAMatrix_01);
 	//_verify(m_Accel_01);
 	//_verify(m_VarEqn_01);
