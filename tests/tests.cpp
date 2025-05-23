@@ -32,6 +32,7 @@
 #include "..\include\GHAMatrix.hpp"
 #include "..\include\Accel.hpp"
 #include "..\include\VarEqn.hpp"
+#include "..\include\DEInteg.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -1201,6 +1202,28 @@ int m_VarEqn_01() {
     return 0;
 }
 
+int m_DEInteg_01() {
+    
+    int n_eqn = 6;
+    double t = 0.0, relerr = 1e-13, abserr = 1e-6, tout = -134.999991953373;
+
+    Matrix Y = zeros(6);
+
+    Y(1) = 6221397.62857869; Y(2) = 2867713.77965738; Y(3) = 3006155.98509949;
+    Y(4) = 4645.04725161806; Y(5) = -2752.21591588204; Y(6) = -7507.99940987031;
+    
+    Matrix& R = DEInteg(Accel, t, tout, relerr, abserr, n_eqn, y);
+
+    Matrix& ans = zeros(6);
+
+    ans(1) = 5542555.89427451; ans(2) = 3213514.83814162; ans(3) = 3990892.92789074;
+    ans(4) = 5394.06894044389; ans(5) = -2365.21290574021; ans(6) = -7061.8448137347;
+    
+    _assert(m_equals(R, ans, 1e-5));
+    
+    return 0;
+}
+
 int all_tests()
 {	
     _verify(m_sum_01);
@@ -1263,6 +1286,8 @@ int all_tests()
 	_verify(m_GHAMatrix_01);
 	_verify(m_Accel_01);
 	_verify(m_VarEqn_01); //57 test
+
+	_verify(m_DEInteg_01);
 
     return 0;
 }
