@@ -1212,7 +1212,7 @@ int m_DEInteg_01() {
     Y(1) = 6221397.62857869; Y(2) = 2867713.77965738; Y(3) = 3006155.98509949;
     Y(4) = 4645.04725161806; Y(5) = -2752.21591588204; Y(6) = -7507.99940987031;
     
-    Matrix& R = DEInteg(Accel, t, tout, relerr, abserr, n_eqn, y);
+    Matrix& R = DEInteg(Accel, t, tout, relerr, abserr, n_eqn, Y);
 
     Matrix& ans = zeros(6);
 

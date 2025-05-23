@@ -170,8 +170,8 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 
             for (int j = 1; j <= ki; j++){
                 aux = ki + 1 - j;
-                yout  = yout  + (transpose(phi.extract_column(aux+1)) * g(aux+1));
-                ypout = ypout + (transpose(phi.extract_column(aux+1)) * rho(aux+1));
+                yout  = yout  + (transponse(phi.extract_column(aux+1)) * g(aux+1));
+                ypout = ypout + (transponse(phi.extract_column(aux+1)) * rho(aux+1));
             }
 
             yout = y + (yout * hi);
@@ -180,18 +180,18 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             t         = tout;
             told      = t;
             OldPermit = PermitTOUT;
-            return transpose(y);
+            return transponse(y);
         } 
         
         if (!PermitTOUT && (fabs(tout-x) < fouru * fabs(x))){
             h = tout - x;
-            yp = func(x,transpose(yy));
+            yp = func(x,transponse(yy));
             y = yy + yp * h;
             State_    = DE_STATE.DE_DONE;
             t         = tout;
             told      = t;
             OldPermit = PermitTOUT;
-            return transpose(y);
+            return transponse(y);
         }
         
         // Test for too much work
@@ -216,7 +216,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
         if (fabs(h) < fouru * fabs(x)){
             h = sign_(fouru * fabs(x), h);
             crash = true;
-            return transpose(y);
+            return transponse(y);
         }
 
         p5eps  = 0.5*epsilon;
@@ -238,11 +238,11 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
         if (p5eps < round){
             epsilon = 2.0 * round * (1.0 + fouru);
             crash = true;
-            return transpose(y);
+            return transponse(y);
         }
 
         if (start){
-            yp = func(x,transpose(y));
+            yp = func(x,transponse(y));
             sum = 0.0;
             
             for (int l = 1; l <= n_eqn; l++){
@@ -394,7 +394,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             xold = x;
             x = x + h;
             absh = fabs(h);
-            yp = func(x,transpose(p));
+            yp = func(x,transponse(p));
         
             erkm2 = 0.0;
             erkm1 = 0.0;
@@ -475,7 +475,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                     crash = true;
                     h = sign_(fouru*fabs(x), h);
                     epsilon = epsilon * 2.0;
-                    return transpose(y); 
+                    return transponse(y); 
                 }
                 
             }
@@ -502,7 +502,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 phi(l,16) = (y(l) - p(l)) - rho_;
             }
         }
-        yp = func(x,transpose(y));
+        yp = func(x,transponse(y));
 
         for (int l = 1; l <= n_eqn; l++){
             phi(l,kp1+1) = yp(l) - phi(l,2);
@@ -576,7 +576,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             t         = x;
             told      = t;
             OldPermit = true;
-            return transpose(y);
+            return transponse(y);
         }
         
         nostep = nostep + 1;
@@ -608,5 +608,5 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
     //   
     // end
 
-    return transpose(y);
+    return transponse(y);
 }
