@@ -71,7 +71,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
     double releps = relerr / epsilon;
     double abseps = abserr / epsilon;
     
-    bool OldPermit= false;
+    bool OldPermit = PermitTOUT;
     double delsgn = 0.0;
     bool start = false;
     double x = 0.0;
@@ -135,11 +135,14 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
     double rho_;
     double erkp1;
     double r;
+	Matrix& yout;
+	Matrix& ypout;
+	
     cout<<"llega antes while(true)"<<endl;
     while (true){        
         if (fabs(x - t) >= absdel){
-            Matrix& yout  = zeros(n_eqn,1);
-            Matrix& ypout = zeros(n_eqn,1);
+            yout  = zeros(n_eqn,1);
+            ypout = zeros(n_eqn,1);
 
             g(2)   = 1.0;
             rho(2) = 1.0;
@@ -180,17 +183,19 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             t         = tout;
             told      = t;
             OldPermit = PermitTOUT;
+			
             return transponse(y);
         } 
         
         if (!PermitTOUT && (fabs(tout-x) < fouru * fabs(x))){
             h = tout - x;
-            yp = func(x,transponse(yy));
+            yp = func(x, transponse(yy));
             y = yy + yp * h;
             State_    = DE_STATE.DE_DONE;
             t         = tout;
             told      = t;
             OldPermit = PermitTOUT;
+			
             return transponse(y);
         }
         
@@ -225,6 +230,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
         if (p5eps < round){
             epsilon = 2.0 * round * (1.0 + fouru);
             crash = true;
+			
             return transponse(y);
         }
 
@@ -337,6 +343,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                     for (int i = nsp2; i <= kp1; i++){
                         limit2 = kp2 - i;
                         temp6  = alpha(i);
+						
                         for (int iq = 1; iq <= limit2; iq++){
                             w(iq+1) = w(iq+1) - temp6 * w(iq+2);
                         }
@@ -349,6 +356,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             if (k >= nsp1){
                 for (int i = nsp1; i <= k; i++){
                     temp1 = beta(i+1);
+					
                     for (int l = 1; l <= n_eqn; l++){
                         phi(l, i+1) = temp1 * phi(l, i+1);
                     }
@@ -394,12 +402,15 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             for (int l = 1; l <= n_eqn; l++){
                 temp3 = 1.0 / wt(l);
                 temp4 = yp(l) - phi(l, 1+1);
+				
                 if (km2 > 0){
                     erkm2 = erkm2 + ((phi(l, km1+1) + temp4) * temp3) * ((phi(l, km1+1) + temp4) * temp3);
                 }
+				
                 if (km2 >= 0){
                     erkm1 = erkm1 + ((phi(l,k+1) + temp4) * temp3) * ((phi(l, k+1) + temp4) * temp3);
-                }                
+                }   
+				
                 erk = erk + (temp4 * temp3) * (temp4 * temp3);
             }
         
@@ -421,6 +432,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                     knew = km1;
                 }
             }
+			
             if (km2 == 0){
                 if (erkm1 <= 0.5 * erk){
                     knew = km1;
@@ -436,6 +448,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 for (int i = 1; i <= k; i++){
                     temp1 = 1.0 / beta(i+1);
                     ip1 = i + 1;
+					
                     for (int l = 1; l <= n_eqn; l++){
                         phi(l,i+1) = temp1 * (phi(l,i+1) - phi(l,ip1+1));
                     }
@@ -467,6 +480,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                     crash = true;
                     h = sign_(fouru*fabs(x), h);
                     epsilon = epsilon * 2.0;
+					
                     return transponse(y); 
                 }
                 
@@ -494,6 +508,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 phi(l,16) = (y(l) - p(l)) - rho_;
             }
         }
+		
         yp = func(x,transponse(y));
 
         for (int l = 1; l <= n_eqn; l++){
@@ -568,6 +583,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             t         = x;
             told      = t;
             OldPermit = true;
+			
             return transponse(y);
         }
         
