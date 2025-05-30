@@ -45,13 +45,13 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
     Matrix& v     = zeros(13,1);
     Matrix& psi_  = zeros(13,1);
 
-    if (t==tout){
+    if (t == tout){
         return transponse(y);
     }
 
     double epsilon = fmax(relerr, abserr);
 
-    if ( ( relerr < 0.0 ) || ( abserr < 0.0 ) || ( epsilon <= 0.0 ) || ( State_ > DE_STATE.DE_INVPARAM ) || ( (State_ != DE_STATE.DE_INIT) && (t != told)) ){
+    if (( relerr < 0.0 ) || ( abserr < 0.0 ) || ( epsilon <= 0.0 ) || ( State_ > DE_STATE.DE_INVPARAM ) || ((State_ != DE_STATE.DE_INIT) && (t != told))){
         State_ = DE_STATE.DE_INVPARAM;
         return transponse(y);
     }
@@ -59,7 +59,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
     double del    = tout - t;
     double absdel = fabs(del);
 
-    double tend   = t + 100.0*del;
+    double tend   = t + 100.0 * del;
 
     if (!PermitTOUT){
         tend = tout;
@@ -147,7 +147,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             hi = tout - x;
             ki = kold + 1;
             
-			cout<<"for 1 while(true)"<<endl;
             for (int i = 1; i <= ki; i++){
                 temp1 = i;
                 w(i+1) = 1.0 / temp1;
@@ -155,7 +154,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             
             term = 0.0;
 
-			cout<<"for 2 while(true)"<<endl;
             for (int j = 2; j <= ki; j++){
                 psijm1 = psi_(j);
                 gamma = (hi + term) / psijm1;
@@ -169,8 +167,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 rho(j+1) = gamma * rho(j);
                 term = psijm1;
             }
-            
-			cout<<"for 3 while(true)"<<endl;
+                
             for (int j = 1; j <= ki; j++){
                 aux = ki + 1 - j;
                 yout  = yout  + (transponse(phi.extract_column(aux+1)) * g(aux+1));
@@ -197,22 +194,8 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             return transponse(y);
         }
         
-        // Test for too much work
-        //   if (nostep >= maxnum)
-        //       State_ = DE_STATE.DE_NUMSTEPS; // Too many steps
-        //       if (stiff) 
-        //           State_ = DE_STATE.DE_STIFF;// Stiffness suspected
-        //       end
-        //       y         = yy;                // Copy last step
-        //       t         = x;
-        //       told      = t;
-        //       OldPermit = true;
-        //       return;                        // Weak failure exit
-        //   end
-        
         h  = sign_(min(fabs(h), fabs(tend-x)), h);
 
-			cout<<"for 4 while(true)"<<endl;
         for (int l = 1; l <= n_eqn; l++){
             wt(l) = releps * fabs(yy(l)) + abseps;
         }
@@ -223,7 +206,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             return transponse(y);
         }
 
-        p5eps  = 0.5*epsilon;
+        p5eps  = 0.5 * epsilon;
         crash  = false;
         g(2)   = 1.0;
         g(3)   = 0.5;
@@ -233,7 +216,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
 
         round = 0.0;
 
-			cout<<"for 5 while(true)"<<endl;
         for (int l = 1; l <= n_eqn; l++){
             round = round + (y(l) * y(l)) / (wt(l) * wt(l));
         }
@@ -250,7 +232,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             yp = func(x,transponse(y));
             sum = 0.0;
             
-			cout<<"for 6 while(true)"<<endl;
             for (int l = 1; l <= n_eqn; l++){
                 phi(l,2) = yp(l);
                 phi(l,3) = 0.0;
@@ -264,7 +245,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 absh = 0.25 * sqrt(epsilon/sum);
             }
 
-            h    = sign_(fmax(absh, fouru*fabs(x)), h);
+            h    = sign_(fmax(absh, fouru * fabs(x)), h);
             hold = 0.0;
             hnew = 0.0;
             k    = 1;
@@ -272,21 +253,22 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             start  = false;
             phase1 = true;
             nornd  = true;
+			
             if (p5eps <= 100.0 * round){
                 nornd = false;
+				
                 for (int l = 1; l <= n_eqn; l++){
                     phi(l,16) = 0.0;
                 }
             }
         } 
         
-			cout<<"llega while(true) 2"<<endl;
         while(true){                                                               
             
-            kp1 = k+1;
-            kp2 = k+2;
-            km1 = k-1;
-            km2 = k-2;
+            kp1 = k + 1;
+            kp2 = k + 2;
+            km1 = k - 1;
+            km2 = k - 2;
           
             if (h != hold){
                 ns = 0;
@@ -306,9 +288,8 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 sig(nsp1+1) = 1.0;
 
                 if (k >= nsp1){
-			cout<<"for 1 while(true) 2"<<endl;
                     for (int i = nsp1; i <= k; i++){
-                        im1   = i-1;
+                        im1   = i - 1;
                         temp2 = psi_(im1+1);
                         psi_(im1+1) = temp1;
                         beta(i+1)  = beta(im1+1) * psi_(im1+1) / temp2;
@@ -327,7 +308,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                         v(k+1) = 1.0 / temp4;
                         nsm2 = ns - 2;
 
-			cout<<"for 2 while(true) 2"<<endl;
                         for (int j = 1; j <= nsm2; j++){
                             aux = k - j;
                             v(aux+1) = v(aux+1) - alpha(j+2) * v(aux+2);
@@ -337,7 +317,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                     limit1 = kp1 - ns;
                     temp5  = alpha(ns+1);
 
-			cout<<"for 3 while(true) 2"<<endl;
                     for (int iq = 1; iq <= limit1; iq++){
                         v(iq+1) = v(iq+1) - temp5 * v(iq+2);
                         w(iq+1) = v(iq+1);
@@ -345,7 +324,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
 
                     g(nsp1+1) = w(2);
                 }else{
-			cout<<"for 4 while(true) 2"<<endl;
                     for (int iq = 1; iq <= k; iq++){
                         temp3 = iq * (iq+1);
                         v(iq+1) = 1.0 / temp3;
@@ -354,45 +332,40 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 }
                 
                 nsp2 = ns + 2;
+				
                 if (kp1 >= nsp2){
-			cout<<"for 5 while(true) 2"<<endl;
                     for (int i = nsp2; i <= kp1; i++){
                         limit2 = kp2 - i;
                         temp6  = alpha(i);
-			cout<<"for 6 while(true) 2"<<endl;
-                        for (int iq = 1; iq <= limit2; iq++)
+                        for (int iq = 1; iq <= limit2; iq++){
                             w(iq+1) = w(iq+1) - temp6 * w(iq+2);
-                        
+                        }
+						
                         g(i+1) = w(2);
                     }
                 }
             }
 
             if (k >= nsp1){
-			cout<<"for 7 while(true) 2"<<endl;
                 for (int i = nsp1; i <= k; i++){
                     temp1 = beta(i+1);
-			cout<<"for 8 while(true) 2"<<endl;
                     for (int l = 1; l <= n_eqn; l++){
                         phi(l, i+1) = temp1 * phi(l, i+1);
                     }
                 }
             }
         
-			cout<<"for 9 while(true) 2"<<endl;
             for (int l = 1; l <= n_eqn; l++){
                 phi(l,kp2+1) = phi(l,kp1+1);
                 phi(l,kp1+1) = 0.0;
                 p(l)       = 0.0;
             }
 
-			cout<<"for 10 while(true) 2"<<endl;
             for (int j = 1; j <= k; j++){
                 aux = kp1 - j;
                 ip1   = aux + 1;
                 temp2 = g(aux+1);
 
-			cout<<"for 11 while(true) 2"<<endl;
                 for (int l = 1; l <= n_eqn; l++){
                     p(l)     = p(l) + temp2 * phi(l,aux+1);
                     phi(l,aux+1) = phi(l,aux+1) + phi(l,ip1+1);
@@ -402,9 +375,8 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             if (nornd){
                 p = y + (p * h);
             }else{
-			cout<<"for 12 while(true) 2"<<endl;
                 for (int l = 1; l <= n_eqn; l++){
-                    tau = h*p(l) - phi(l,16);
+                    tau = h * p(l) - phi(l,16);
                     p(l) = y(l) + tau;
                     phi(l,17) = (p(l) - y(l)) - tau;
                 }
@@ -419,7 +391,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             erkm1 = 0.0;
             erk = 0.0;
         
-			cout<<"for 13 while(true) 2"<<endl;
             for (int l = 1; l <= n_eqn; l++){
                 temp3 = 1.0 / wt(l);
                 temp4 = yp(l) - phi(l, 1+1);
@@ -435,6 +406,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             if (km2 > 0){
                 erkm2 = absh * sig(km1+1) * gstr(km2+1) * sqrt(erkm2);
             }
+			
             if (km2 >= 0){
                 erkm1 = absh * sig(k+1) * gstr(km1+1) * sqrt(erkm1);
             }
@@ -444,7 +416,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             erk = temp5 * sig(kp1+1) * gstr(k+1);
             knew = k;
             
-            if (km2 >0){
+            if (km2 > 0){
                 if (fmax(erkm1,erkm2) <= erk){
                     knew = km1;
                 }
@@ -461,18 +433,15 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 phase1 = false; 
                 x = xold;
 
-			cout<<"for 14 while(true) 2"<<endl;
                 for (int i = 1; i <= k; i++){
                     temp1 = 1.0 / beta(i+1);
                     ip1 = i + 1;
-			cout<<"for 15 while(true) 2"<<endl;
                     for (int l = 1; l <= n_eqn; l++){
                         phi(l,i+1) = temp1 * (phi(l,i+1) - phi(l,ip1+1));
                     }
                 }
             
                 if (k >= 2){
-			cout<<"for 16 while(true) 2"<<endl;
                     for (int i = 2; i <= k; i++){
                         psi_(i) = psi_(i+1) - h;
                     }
@@ -508,7 +477,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             }
         
         }
-			cout<<"termina while(true) 2"<<endl;
 
         kold = k;
         hold = h;
@@ -594,8 +562,8 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
 
         if (crash){
             State_    = DE_STATE.DE_BADACC;
-            relerr    = epsilon*releps;
-            abserr    = epsilon*abseps;
+            relerr    = epsilon * releps;
+            abserr    = epsilon * abseps;
             y         = yy;
             t         = x;
             told      = t;
@@ -606,6 +574,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
         nostep = nostep + 1;
     
         kle4 = kle4 + 1;
+		
         if (kold >  4){
             kle4 = 0;
         }
@@ -615,22 +584,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
         }
     
     }
-    
-    //   if ( State_==DE_STATE.DE_INVPARAM )
-    //       error ('invalid parameters in DEInteg');
-    //       exit; 
-    //   end
-    //   if ( State_==DE_STATE.DE_BADACC )
-    //       warning ('on','Accuracy requirement not achieved in DEInteg');
-    //   end
-    //   if ( State_==DE_STATE.DE_STIFF )
-    //       warning ('on','Stiff problem suspected in DEInteg');
-    //   end
-    //   if ( State_ >= DE_STATE.DE_DONE )
-    //       break;
-    //   end
-    //   
-    // end
+			cout<<"termina while(true)"<<endl;
 
     return transponse(y);
 }
