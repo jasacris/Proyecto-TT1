@@ -18,7 +18,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
 
     int State_ = DE_STATE.DE_INIT;
     bool PermitTOUT = true;
-    int told = 0;
+    double told = 0.0;
 
     Matrix& two  = zeros(14);
 
@@ -121,7 +121,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
     int limit1;
     double temp5;
     double temp3;
-    int nsp2
+    int nsp2;
     int limit2;
     double temp6;
     int ip1;
