@@ -1286,8 +1286,10 @@ int all_tests()
 	_verify(m_GHAMatrix_01);
 	_verify(m_Accel_01);
 	_verify(m_VarEqn_01); //57 test
+	cout<<"llega antes deinteg"<<endl;
 
 	_verify(m_DEInteg_01); //58 test
+	cout<<"llega despues deinteg"<<endl;
 
     return 0;
 }
