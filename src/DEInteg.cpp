@@ -136,7 +136,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
     double erkp1;
     double r;
 	
-    cout<<"llega antes while(true)"<<endl;
     while (true){        
         if (fabs(x - t) >= absdel){
             Matrix& yout  = zeros(n_eqn,1);
@@ -266,7 +265,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                 }
             }
         } 
-        cout<<"llega while(true) 2"<<endl;
+		
         while(true){                                                               
             
             kp1 = k + 1;
@@ -487,8 +486,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             if (success){
                 break;
             }
-        
-        }cout<<"termina while(true) 2"<<endl;
 
         kold = k;
         hold = h;
@@ -598,7 +595,6 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
         }
     
     }
-			cout<<"termina while(true)"<<endl;
 
     return transponse(y);
 }
