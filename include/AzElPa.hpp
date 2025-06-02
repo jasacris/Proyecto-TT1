@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include "..\include\matrix.hpp"
+#include "..\include\SAT_Const.hpp"
 #include <tuple>
 
 using namespace std;

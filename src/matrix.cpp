@@ -274,7 +274,7 @@ Matrix& inv (Matrix &m){
         double diag = (*m_aux)(i, i);
 
 		for (int j = i + 1; j <= n; j++) {
-            if (abs((*m_aux)(j, i)) > abs(diag)) {
+            if (fabs((*m_aux)(j, i)) > fabs(diag)) {
                 diag = (*m_aux)(j, i);
                 piv = j;
             }

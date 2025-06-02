@@ -3,8 +3,8 @@
 
 #define _USE_MATH_DEFINES
 
+#include "..\include\SAT_Const.hpp"
 #include <math.h>
-
 #include <iostream>
 #include <cmath>
 

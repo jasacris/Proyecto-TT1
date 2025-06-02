@@ -86,7 +86,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
     }
 
     double hi;
-    int ki;
+    double ki;
     int kold = 0;
     double temp1;
     double term;
@@ -187,7 +187,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
         
         if (!PermitTOUT && (fabs(tout-x) < fouru * fabs(x))){
             h = tout - x;
-            yp = func(x, transponse(yy));
+            yp = transponse(func(x, transponse(yy)));
             y = yy + yp * h;
             State_    = DE_STATE.DE_DONE;
             t         = tout;
@@ -197,7 +197,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             return transponse(y);
         }
         
-        h  = sign_(min(fabs(h), fabs(tend-x)), h);
+        h  = sign_(fmin(fabs(h), fabs(tend-x)), h);
 
         for (int l = 1; l <= n_eqn; l++){
             wt(l) = releps * fabs(yy(l)) + abseps;
@@ -233,7 +233,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
         }
 
         if (start){
-            yp = func(x,transponse(y));
+            yp = transponse(func(x,transponse(y)));
             sum = 0.0;
             
             for (int l = 1; l <= n_eqn; l++){
@@ -391,7 +391,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             xold = x;
             x = x + h;
             absh = fabs(h);
-            yp = func(x,transponse(p));
+            yp = transponse(func(x,transponse(p)));
         
             erkm2 = 0.0;
             erkm1 = 0.0;
@@ -507,7 +507,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             }
         }
 		
-        yp = func(x,transponse(y));
+        yp = transponse(func(x,transponse(y)));
 
         for (int l = 1; l <= n_eqn; l++){
             phi(l,kp1+1) = yp(l) - phi(l,2);
@@ -542,7 +542,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
                     erkp1 = absh * gstr(kp1+1) * sqrt(erkp1);
                        
                     if (k > 1){
-                        if ( erkm1 <= min(erk,erkp1)){
+                        if ( erkm1 <= fmin(erk,erkp1)){
                             k = km1;
                             erk = erkm1;
                         }else{
@@ -565,7 +565,7 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             if (p5eps < erk){
                 temp2 = k + 1;
                 r = p5eps / pow(erk,(1.0 / temp2));
-                hnew = absh * fmax(0.5, min(0.9,r));
+                hnew = absh * fmax(0.5, fmin(0.9,r));
                 hnew = sign_(fmax(hnew, fouru*fabs(x)), h);
             }else{
                 hnew = h;
