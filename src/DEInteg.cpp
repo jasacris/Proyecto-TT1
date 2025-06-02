@@ -486,6 +486,8 @@ Matrix& DEInteg(Matrix& func(double, Matrix&), double t, double tout, double rel
             if (success){
                 break;
             }
+        
+        }
 
         kold = k;
         hold = h;
