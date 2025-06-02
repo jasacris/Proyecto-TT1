@@ -162,7 +162,7 @@ int main() {
     Matrix& dEdY = zeros(1);
     Matrix& dDds = zeros(1);
     Matrix& dDdY = zeros(1);
-    
+	
     for (int i = 1; i <= nobs; i++){
         t_old = t;
         Y_old = Y;
@@ -190,7 +190,7 @@ int main() {
         }
         
         yPhi = DEInteg (VarEqn, 0, t - t_old, 1e-13, 1e-6, 42, yPhi);
-        
+		
         for (int j = 1; j <= 6; j++){
             Phi.assign_column(yPhi.extract_vector(6 * j + 1, 6 * j + 6), j);
         }
@@ -207,7 +207,7 @@ int main() {
             
         tie(Azim, Elev, dAds, dEds) = AzElPa(transponse(s));
         dAdY = (dAds * LT * U).union_vector(zeros(3));
-        
+		
         tie(K, Y, P) = MeasUpdate(Y, obs(i,2), Azim, sigma_az, dAdY, P, 6);
         
         r = transponse(Y.extract_vector(1,3));
@@ -225,13 +225,13 @@ int main() {
         
         tie(K, Y, P) = MeasUpdate(Y, obs(i,4), Dist, sigma_range, dDdY, P, 6);
     }
-
+	
     tie(x_pole, y_pole, UT1_UTC, LOD, dpsi, deps, dx_pole, dy_pole, TAI_UTC) = IERS(obs(46,1), 'l');
     tie(UT1_TAI, UTC_GPS, UT1_GPS, TT_UTC, GPS_UTC) = timediff(UT1_UTC, TAI_UTC);
     Mjd_TT = Mjd_UTC + TT_UTC / 86400;
     AuxParam.Mjd_UTC = Mjd_UTC;
     AuxParam.Mjd_TT = Mjd_TT;
-
+cout<<Y<<endl;
     Matrix& Y0 = DEInteg (Accel, 0, -(obs(46,1) - obs(1,1)) * 86400.0, 1e-13, 1e-6, 6, Y);
 
     Matrix& Y_true = zeros(6,1);

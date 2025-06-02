@@ -229,6 +229,10 @@ Matrix& Matrix::operator / (const double n){
 }
 
 Matrix& Matrix::operator = (Matrix &m){	
+	if(&m == this){
+		return (*this);
+	}
+
 	this->n_row = m.n_row;
 	this->n_column = m.n_column;
 	this->data = (double **) malloc(m.n_row*sizeof(double *));

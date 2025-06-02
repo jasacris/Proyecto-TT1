@@ -5,11 +5,11 @@ tuple<Matrix&, Matrix&, Matrix&> MeasUpdate(Matrix& x, double z, double g, doubl
     int m = 1;
     double Inv_W = s*s; 
 
-    Matrix& K = P * transponse(G) * inv(G * P * transponse(G) + Inv_W);
+    Matrix& K = transponse(P * transponse(G) * inv(G * P * transponse(G) + Inv_W));
 
     x = x + (K * (z - g));
 
-    P = (eye(n) - K * G) * P;
+    P = (eye(n) - transponse(K) * G) * P;
 
     return tie(K,x,P);
 }
