@@ -231,7 +231,7 @@ int main() {
     Mjd_TT = Mjd_UTC + TT_UTC / 86400;
     AuxParam.Mjd_UTC = Mjd_UTC;
     AuxParam.Mjd_TT = Mjd_TT;
-cout<<Y<<endl;
+	
     Matrix& Y0 = DEInteg (Accel, 0, -(obs(46,1) - obs(1,1)) * 86400.0, 1e-13, 1e-6, 6, Y);
 
     Matrix& Y_true = zeros(6,1);

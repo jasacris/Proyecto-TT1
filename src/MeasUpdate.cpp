@@ -2,8 +2,7 @@
 
 tuple<Matrix&, Matrix&, Matrix&> MeasUpdate(Matrix& x, double z, double g, double s, Matrix& G, Matrix& P, int n){
 
-    int m = 1;
-    double Inv_W = s*s; 
+    double Inv_W = s * s; 
 
     Matrix& K = transponse(P * transponse(G) * inv(G * P * transponse(G) + Inv_W));
 
